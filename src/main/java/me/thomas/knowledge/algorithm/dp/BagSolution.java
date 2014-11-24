@@ -1,6 +1,7 @@
 package me.thomas.knowledge.algorithm.dp;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -84,14 +85,11 @@ public class BagSolution {
 
     public static void main(String[] args) {
         Bag bag = new Bag(7);
-        Gemstone stone1 = new Gemstone(20, 5);
-        Gemstone stone2 = new Gemstone(10, 4);
-        Gemstone stone3 = new Gemstone(12, 3);
-
-        List<Gemstone> list = new ArrayList<Gemstone>();
-        list.add(stone1);
-        list.add(stone2);
-        list.add(stone3);
+        List<Gemstone> list = Arrays.asList(
+                new Gemstone(20, 5),
+                new Gemstone(10, 4),
+                new Gemstone(10, 3)
+        );
 
         // 定义二维数组来存放所有的情况: 宝石从少到多，剩余容量从多到少。
         int table[][] = new int[list.size() + 1][bag.getCapacity() + 1];
@@ -99,8 +97,8 @@ public class BagSolution {
             for (int j = bag.getCapacity(); j > 0; j--) { // j表示当前背包剩余容量
                 if (i == 0) {
                     table[i][j] = 0;
-                } else if (i > 0 && j >= list.get(i - 1).getWeight()) { // j>=list.get(i-1).getWeight()表示第i-1个宝石可以放入背包的剩余容量中
-                    if (table[i - 1][j - list.get(i - 1).getWeight()] + list.get(i - 1).getPrice() >= table[i - 1][j]) {
+                } else if (j >= list.get(i - 1).getWeight()) { // j>=list.get(i-1).getWeight()表示第i-1个宝石可以放入背包的剩余容量中
+                    if (table[i - 1][j - list.get(i - 1).getWeight()] + list.get(i - 1).getPrice() > table[i - 1][j]) {
                         // 如果放入第i-1个宝石的总价值大于不放入时的价值。
                         // 当然此时前i-1个宝石的剩余容量为j-list.get(i-1).getWeight()
                         table[i][j] = table[i - 1][j - list.get(i - 1).getWeight()] + list.get(i - 1).getPrice();
@@ -111,8 +109,10 @@ public class BagSolution {
             }
         }
 
+        // table[list.size()][bag.getCapacity()]就是计算出的最大价值
         bag.setValue(table[list.size()][bag.getCapacity()]);
 
+        // 这里检查哪些宝石被放入了包中
         int cap = bag.getCapacity();
         for (int i = list.size(); i > 0; i--) {
             if (table[i][cap] > table[i - 1][cap]) {
