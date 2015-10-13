@@ -13,44 +13,49 @@ import java.util.regex.Pattern;
 
 public class SearchFile {
 
-    public static String TABLE_NAME = "ACT_GE_BYTEARRAY";
-
     public static void main(String[] args) throws IOException {
 
-    	String dir = "/home/thomas/DATA";
+    	String dir = "E:\\workspace\\finestay\\4Code\\ww-finestay";
 
     	int total = 0;
     	long start = System.currentTimeMillis();
 
-    	List<File> matchedFiles = FileUtil.find(dir, false, i("table_export*"));
+    	List<File> matchedFiles = FileUtil.find(dir, true, i("*.java"));
     	for (File file : matchedFiles) {
-            doRename(file);
+            doModify(file, "com.ww.finestay.persist.pagination", "com.ww.finestay.common.utils.pagination");
     	}
     	long end = System.currentTimeMillis();
     	System.out.println("Total: " + total + ", time: " + (end - start) + "ns.");
-
     }
 
-    private static String i(String keyWord) {
-    	return keyWord.replace(".", "\\.").replace('?', '.').replace("*", ".*");
-    }
-
-    private static void doModify(File file) throws IOException {
-        boolean contain = false;
+    private static void doModify(File file, String target, String replacedWith) throws IOException {
+        boolean modified = false;
         BufferedReader in = new BufferedReader(new FileReader(file));
 
+        StringBuffer sb = new StringBuffer(1024);
         String s;
         while ((s = in.readLine()) != null) {
-            if (s.contains("table_export")) {
-                s = s.replace("table_export", TABLE_NAME);
+            if (s.contains(target)) {
+                modified = true;
+                s = s.replace(target, replacedWith);
             }
+            sb.append(s).append("\r\n");
         }
+
+        if (modified) {
+            FileUtil.write(file, sb.toString());
+        }
+
         in.close();
     }
 
     private static void doRename(File file) throws IOException {
         String filePath = file.getAbsolutePath().replace("table_export", "G_RULE");
         file.renameTo(new File(filePath));
+    }
+
+    private static String i(String keyWord) {
+        return keyWord.replace(".", "\\.").replace('?', '.').replace("*", ".*");
     }
 
     private static void applyTemplate(String s) {
