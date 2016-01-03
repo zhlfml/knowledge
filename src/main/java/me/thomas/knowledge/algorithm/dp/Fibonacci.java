@@ -36,7 +36,7 @@ public class Fibonacci {
 
     public static void main(String[] args) {
         Fibonacci f = new Fibonacci();
-        long result = f.fib2(43);
+        long result = f.fib(43);
         System.out.println(result);
     }
 }

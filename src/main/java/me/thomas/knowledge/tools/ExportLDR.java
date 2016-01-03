@@ -3,10 +3,11 @@ package me.thomas.knowledge.tools;
 import me.thomas.knowledge.utils.DbHelper;
 import me.thomas.knowledge.utils.FileUtil;
 import me.thomas.knowledge.utils.UUIDUtil;
-import oracle.sql.BLOB;
-import oracle.sql.CLOB;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.sql.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -94,22 +95,22 @@ public class ExportLDR {
                                 }
                                 break;
                             case "BLOB":
-                                value = rs.getBlob(i);
-                                if (value != null) {
-                                    InputStream binaryStream = ((BLOB) value).getBinaryStream();
-                                    String blobFile = lobFile + "_" + i + ".ldr";
-                                    FileUtil.write(dataPath + blobFile, binaryStream);
-                                    ldr.append(dataFolder + blobFile);
-                                }
+//                                value = rs.getBlob(i);
+//                                if (value != null) {
+//                                    InputStream binaryStream = ((BLOB) value).getBinaryStream();
+//                                    String blobFile = lobFile + "_" + i + ".ldr";
+//                                    FileUtil.write(dataPath + blobFile, binaryStream);
+//                                    ldr.append(dataFolder + blobFile);
+//                                }
                                 break;
                             case "CLOB":
                                 value = rs.getClob(i);
-                                if (value != null) {
-                                    String content = ((CLOB) value).getSubString(1, (int) ((CLOB) value).length());
-                                    String clobFile = lobFile + "_" + i + ".ldr";
-                                    FileUtil.write(dataPath + clobFile, content);
-                                    ldr.append(dataFolder + clobFile);
-                                }
+//                                if (value != null) {
+//                                    String content = ((CLOB) value).getSubString(1, (int) ((CLOB) value).length());
+//                                    String clobFile = lobFile + "_" + i + ".ldr";
+//                                    FileUtil.write(dataPath + clobFile, content);
+//                                    ldr.append(dataFolder + clobFile);
+//                                }
                                 break;
                             default:
                                 System.err.println(tableName + "." + columnLabel + " -> " + columnTypeName);
