@@ -22,7 +22,7 @@ public class MergeSortTest {
 
     @Test
     public void testMergeSort() throws Exception {
-        int[] result = sort.mergeSort(mass);
+        int[] result = sort.sort(mass);
 
         assertArrayEquals(new int[] {0,1,2,3,4,5,6,7,8,9,11,13,15}, result);
     }
