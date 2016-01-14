@@ -29,6 +29,7 @@ public class MergeSort {
         a1 = sort(a1);
         a2 = sort(a2);
 
+        // 合并两个小数组。
         return mergeArray(a1, a2);
     }
 
