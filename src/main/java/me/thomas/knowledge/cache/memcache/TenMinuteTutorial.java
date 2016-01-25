@@ -34,13 +34,18 @@ public class TenMinuteTutorial {
         client.prepend("name", "hello ");
         System.out.println(client.get("name"));
 
+        // 初始化计数器的时候，请使用字符串
+        client.set("counter", "0");
+        client.incr("counter");
+        System.out.println(client.get("counter"));
+
         List<Gemstone> gemstones = new ArrayList<>();
         gemstones.add(new Gemstone(12, 4));
         gemstones.add(new Gemstone(11, 2));
         gemstones.add(new Gemstone(16, 5));
         gemstones.add(new Gemstone(14, 3));
 
-        client.replace("gemstones", gemstones);
+        client.set("gemstones", gemstones);
 
         List<Gemstone> gemstonesCopy = (List<Gemstone>) client.get("gemstones");
         for (Gemstone gemstone : gemstonesCopy) {
@@ -50,7 +55,7 @@ public class TenMinuteTutorial {
 }
 
 /**
- * 放入memcache的对象必须能够序列化
+ * 放入memcache的对象必须实现序列化接口
  */
 class Gemstone implements Serializable {
 
