@@ -46,23 +46,21 @@ public class Consumer implements Runnable {
                 }
             });
 
-            Thread.sleep(5000);
             session.commit();
         } catch (JMSException jmse) {
             Thread.currentThread().interrupt();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         } finally {
-            try {
-                if (session != null) {
-                    session.close();
-                }
-                if (connection != null) {
-                    connection.close();
-                }
-            } catch (JMSException ignored) {
-
-            }
+            // 只要session不关闭，这个线程就一直处于就绪状态。
+//            try {
+//                if (session != null) {
+//                    session.close();
+//                }
+//                if (connection != null) {
+//                    connection.close();
+//                }
+//            } catch (JMSException ignored) {
+//
+//            }
         }
     }
 }
