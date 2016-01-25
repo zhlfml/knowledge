@@ -15,7 +15,7 @@ public class OrderTask implements Task {
     // 使用虚拟机的监视器实现同步
     @Override
     public synchronized boolean execute() {
-        System.out.println(new Fibonacci().fib(20));
+        System.out.println(Fibonacci.getInstance().fib(20));
         if (left-- > 0) {
             System.out.println(Thread.currentThread().getName() + "抢到一个。");
             return true;

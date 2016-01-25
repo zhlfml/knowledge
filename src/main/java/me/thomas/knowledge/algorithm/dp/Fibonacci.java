@@ -1,14 +1,22 @@
 package me.thomas.knowledge.algorithm.dp;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by thomas on 6/6/14.
  */
 public class Fibonacci {
+    // 使用ConcurrentHashMap提高并发性能和安全性
+    private Map<Long, Long> map = new ConcurrentHashMap<>();
 
-    private Map<Long, Long> map = new HashMap<Long, Long>();
+    private static final Fibonacci instance = new Fibonacci();
+
+    private Fibonacci() {}
+
+    public static Fibonacci getInstance() {
+        return instance;
+    }
 
     public long fib(long n) {
         if (n == 0 || n == 1) {
@@ -34,9 +42,4 @@ public class Fibonacci {
         return result;
     }
 
-    public static void main(String[] args) {
-        Fibonacci f = new Fibonacci();
-        long result = f.fib(43);
-        System.out.println(result);
-    }
 }
