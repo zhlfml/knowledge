@@ -1503,6 +1503,46 @@ public class StringUtil {
 		return String.valueOf(obj);
 	}
 
+	/**
+	 * 给字符串的中间len位使用*号代替
+	 *
+	 * @param str 原字符串
+	 * @param markLen 需要遮挡的位数
+	 * @return 遮挡过后的字符串
+	 */
+	public static String mark(String str, int markLen) {
+		if (str == null || str.length() == 0) {
+			return "";
+		}
+
+		// 需要遮挡的起始位置和终止位置
+		int start = 0,
+				end = 0;
+		int length = str.length();
+		// 如果字符长度小于需要遮挡的位数加上至少不遮挡的2位，则除第一位外，其余使用*代替
+		if (length < markLen + 2) {
+			start = 1;
+			end = length;
+		}
+		// 否则就算出正常起始位置和终止位置
+		else {
+			int diff = length - markLen;
+			start = diff / 2;
+			end = start + markLen;
+		}
+
+		char[] result = new char[length];
+		for (int i = 0; i < length; i++) {
+			if (i >= start && i < end) {
+				result[i] = '*';
+			} else {
+				result[i] = str.charAt(i);
+			}
+		}
+
+		return new String(result);
+	}
+
 	private static String _highlight(String s, Pattern pattern,
 			String highlight1, String highlight2) {
 
