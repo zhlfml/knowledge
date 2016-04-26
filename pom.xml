@@ -56,6 +56,17 @@
             <artifactId>slf4j-api</artifactId>
             <version>1.6.3</version>
         </dependency>
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>amazon-sqs-java-messaging-lib</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
+        <dependency>
+            <artifactId>aws-java-sdk-s3</artifactId>
+            <groupId>com.amazonaws</groupId>
+            <version>1.10.26</version>
+        </dependency>
 
         <dependency>
             <groupId>junit</groupId>
