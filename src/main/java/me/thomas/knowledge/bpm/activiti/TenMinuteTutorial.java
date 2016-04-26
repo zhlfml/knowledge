@@ -64,6 +64,8 @@ public class TenMinuteTutorial {
             variables = new HashMap<String, Object>();
             variables.put("approved", true);
 
+            taskService.addComment(task.getId(), processInstanceId, "小伙子,干的漂亮.");
+            taskService.createAttachment("application/docx", task.getId(), processInstanceId, "文案书.docx", "", "http://mybucket.s3.amazon.com/xx-swxs-csce");
             taskService.complete(task.getId(), variables);
         }
 
