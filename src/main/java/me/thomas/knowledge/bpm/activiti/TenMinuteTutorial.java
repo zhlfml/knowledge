@@ -52,6 +52,7 @@ public class TenMinuteTutorial {
         List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("manager").active().list();
         System.out.println("manager's tasks count => " + tasks.size());
         for (Task task : tasks) {
+            Task task1 = taskService.createTaskQuery().taskId(task.getId()).singleResult();
             // claim it
             taskService.claim(task.getId(), "thomas");
         }
