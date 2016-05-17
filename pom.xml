@@ -13,7 +13,7 @@
     <properties>
         <jdk.version>1.7</jdk.version>
         <mysql.version>5.1.34</mysql.version>
-        <activiti.version>5.19.0.2</activiti.version>
+        <activiti.version>5.19.0</activiti.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -84,6 +84,12 @@
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql.version}</version>
         </dependency>
+        <dependency>
+            <groupId>dom4j</groupId>
+            <artifactId>dom4j</artifactId>
+            <version>1.6.1</version>
+        </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
