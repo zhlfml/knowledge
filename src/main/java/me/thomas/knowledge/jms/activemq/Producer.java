@@ -26,11 +26,17 @@ public class Producer implements Runnable {
             MessageProducer producer = session.createProducer(destination);
             producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 
-            for (int i = 0; i < 1000; i++) {
+            for (int i = 0; i < 10; i++) {
                 TextMessage message = session.createTextMessage("hello everyone!" + System.currentTimeMillis());
                 producer.send(message);
-                session.commit();
+                // 如果不commit,JMS提供者会从队列中删除这些消息,而且这些消息也不会传送给消费者.
+                // 这里是每发送5条消息,就commit1次.
+                if (i % 5 == 0) {
+                    session.commit();
+                }
             }
+            // 将剩余的消息发送出去.
+            session.commit();
         } catch (JMSException jmse) {
             Thread.currentThread().interrupt();
         } finally {

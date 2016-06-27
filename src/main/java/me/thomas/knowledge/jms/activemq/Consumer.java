@@ -22,12 +22,11 @@ public class Consumer implements Runnable {
                 ActiveMQConnection.DEFAULT_PASSWORD, "tcp://127.0.0.1:61616");
 
         Connection connection = null;
-        Session session = null;
         try {
             connection = connectionFactory.createConnection();
             connection.start();
 
-            session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
+            final Session session = connection.createSession(true, Session.AUTO_ACKNOWLEDGE);
             Destination destination = session.createQueue("MessageQueue");
 
             MessageConsumer consumer = session.createConsumer(destination);
@@ -40,13 +39,16 @@ public class Consumer implements Runnable {
                         if (content != null) {
                             System.out.println(name + ": " + content);
                         }
+                        // 接收消息时，如果在接收消息方法正常完成后没有调用commit方法，
+                        // 消息就会被标记为未被传送，JMS提供者会将这些消息重新传送给消费者.
+                        // 所以在收到消息后必须立即commit,向JMS提供者确认已经收到消息.
+                        session.commit();
                     } catch (JMSException e) {
                         Thread.currentThread().interrupt();
                     }
+
                 }
             });
-
-            session.commit();
         } catch (JMSException jmse) {
             Thread.currentThread().interrupt();
         } finally {
