@@ -2,6 +2,7 @@ package me.thomas.knowledge.concurrent;
 
 import me.thomas.knowledge.algorithm.dp.Fibonacci;
 
+import java.util.Date;
 import java.util.concurrent.*;
 
 /**
@@ -16,7 +17,7 @@ public class FutureDemo {
         FutureTask<Long> futureTask = new FutureTask<>(new Callable<Long>() {
             @Override
             public Long call() throws Exception {
-                return fibonacci.fib(43);
+                return fibonacci.fib(8);
             }
         });
         // 一定要在新线程中启动这个任务
@@ -27,15 +28,17 @@ public class FutureDemo {
         Future<Long> future = executor.submit(new Callable<Long>() {
             @Override
             public Long call() throws Exception {
-                return fibonacci.fib(43);
+                return fibonacci.fib(48);
             }
         });
         // 只接受一个任务，做完任务后需要shutdown
         executor.shutdown();
 
         try {
-            System.out.println("newFutureTask: " + futureTask.get());
-            System.out.println("executor.submit: " + future.get());
+            // future.get()方法是会阻塞当前线程的操作
+            System.out.println("newFutureTask: " + futureTask.get() + " at " + new Date().getTime());
+            System.out.println("executor.submit: " + future.get() + " at " + new Date().getTime());
+            System.out.println("over");
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
