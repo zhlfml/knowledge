@@ -28,7 +28,10 @@ public class StreamTutorial {
         );
 
         List<String> lowCaloricDishNames = menu.parallelStream()
-                .filter(d -> d.getCalories() < 400)
+                .filter(d -> {
+                    System.out.println(Thread.currentThread().getName() + " -> " + d.getName());
+                    return d.getCalories() < 400;
+                })
                 .sorted(Comparator.comparing(Dish::getCalories))
                 .map(Dish::getName)
                 .collect(Collectors.toList());
