@@ -37,7 +37,7 @@ public class Fibonacci {
                 result = fib2(n - 1) + fib2(n - 2);
             }
         }
-        map.put(n, result);
+        map.putIfAbsent(n, result);
 
         return result;
     }
