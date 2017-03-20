@@ -49,11 +49,7 @@ public class MatchMakingTestDrive {
 	}
 
 	PersonBean getNonOwnerProxy(PersonBean person) {
-		
-        return (PersonBean) Proxy.newProxyInstance(
-            	person.getClass().getClassLoader(),
-            	person.getClass().getInterfaces(),
-                new NonOwnerInvocationHandler(person));
+        return new NonOwnerInvocationHandler().bind(person);
 	}
 
 	PersonBean getPersonFromDatabase(String name) {
