@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
 import me.thomas.knowledge.spring.config.ElConfig;
 
 /**
+ * 要点：使用aspectj-maven-plugin在编译时织入切面代码。
+ *
  * @author zhaoxinsheng
  * @date 24/11/2016.
  */
