@@ -150,8 +150,7 @@ public class HttpClient {
     }
 
     public static String execute(HttpUriRequest request) {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        try {
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             CloseableHttpResponse response = httpClient.execute(request);
             if (logger.isDebugEnabled()) {
                 logger.debug(response.getStatusLine().toString());
@@ -170,12 +169,6 @@ public class HttpClient {
             logger.warn(response.getStatusLine().getReasonPhrase());
         } catch (IOException e) {
             logger.error(e.getMessage(), e);
-        } finally {
-            try {
-                httpClient.close();
-            } catch (IOException e) {
-                // ignore
-            }
         }
 
         return null;
