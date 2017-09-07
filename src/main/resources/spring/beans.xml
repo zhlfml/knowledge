@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="beanPostProcessor" class="me.thomas.knowledge.spring.lifecycle.MyBeanPostProcessor" />
+
+    <bean id="instantiationAwareBeanPostProcessor" class="me.thomas.knowledge.spring.lifecycle.MyInstantiationAwareBeanPostProcessor" />
+
+    <bean id="beanFactoryPostProcessor" class="me.thomas.knowledge.spring.lifecycle.MyBeanFactoryPostProcessor" />
+
+    <!-- factory.getBean(beanName: "zhlfml", Person.class); -->
+    <bean id="zhlfml" class="me.thomas.knowledge.spring.lifecycle.Person"
+          init-method="myInit"
+          destroy-method="myDestroy"
+          p:name="匿名"
+          p:address="苏州"
+          p:phone="137****4401"
+    />
+</beans>
