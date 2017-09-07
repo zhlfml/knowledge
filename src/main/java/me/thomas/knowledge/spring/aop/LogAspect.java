@@ -1,4 +1,4 @@
-package me.thomas.knowledge.aop;
+package me.thomas.knowledge.spring.aop;
 
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.After;
@@ -15,10 +15,10 @@ import java.lang.reflect.Method;
  * @date 24/11/2016.
  */
 @Aspect
-//@Component // 得声明是一个component，或者在@Configuration类中添加一个@Bean //在使用aspectj-maven-plugin在编译时织入切面代码时，可以不加@Component
+@Component // 得声明是一个component，或者在@Configuration类中添加一个@Bean //在使用aspectj-maven-plugin在编译时织入切面代码时，可以不加@Component
 public class LogAspect {
 
-    @Pointcut("@annotation(me.thomas.knowledge.aop.Action)")
+    @Pointcut("@annotation(me.thomas.knowledge.spring.aop.Action)")
     public void annotationPointCut() {
 
     }
@@ -31,7 +31,7 @@ public class LogAspect {
         System.out.println("LogAspect AnnotationService: " + action.name());
     }
 
-    @Before("execution(* me.thomas.knowledge.aop.DemoMethodService.* (..))")
+    @Before("execution(* me.thomas.knowledge.spring.aop.DemoMethodService.* (..))")
     public void before(JoinPoint joinPoint) {
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
         Method method = signature.getMethod();

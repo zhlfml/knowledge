@@ -1,4 +1,4 @@
-package me.thomas.knowledge.aop;
+package me.thomas.knowledge.spring.aop;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 

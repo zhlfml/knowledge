@@ -1,7 +1,8 @@
-package me.thomas.knowledge.aop;
+package me.thomas.knowledge.spring.aop;
 
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.context.annotation.Import;
 
 import me.thomas.knowledge.spring.config.ElConfig;
@@ -16,9 +17,9 @@ import me.thomas.knowledge.spring.config.ElConfig;
  * @date 24/11/2016.
  */
 @Configuration
-@ComponentScan("me.thomas.knowledge.aop")
+@ComponentScan("me.thomas.knowledge.spring.aop")
 @Import(ElConfig.class)
-//@EnableAspectJAutoProxy
+@EnableAspectJAutoProxy
 public class AopConfig {
 
 //    @Bean

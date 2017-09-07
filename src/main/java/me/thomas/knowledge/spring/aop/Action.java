@@ -1,4 +1,4 @@
-package me.thomas.knowledge.aop;
+package me.thomas.knowledge.spring.aop;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
