@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * @author zhaoxinsheng
@@ -28,8 +29,12 @@ public class Shop {
     public Future<Double> getPriceAsync(String product) {
         CompletableFuture<Double> future = new CompletableFuture<>();
         new Thread(() -> {
-            double price = getPrice(product);
-            future.complete(price);
+            try {
+                double price = getPrice(product);
+                future.complete(price);
+            } catch (Exception ex) {
+                future.completeExceptionally(ex);
+            }
         }).start();
         return future;
     }
@@ -44,16 +49,18 @@ public class Shop {
     public static void main(String[] args) {
         Shop shop = new Shop("BestShop");
         long start = System.nanoTime();
-        Future<Double> futurePrice = shop.getPriceAsync("my favorite product");
+        Future<Double> futurePrice = shop.getPriceAsync("");
         long invocationTime = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Invocation returned after " + invocationTime + "ms");
         try {
-            double price = futurePrice.get();
+            double price = futurePrice.get(2, TimeUnit.SECONDS);
             System.out.printf("Price is %.2f%n", price);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
             throw new RuntimeException(e.getCause());
+        } catch (TimeoutException e) {
+            throw new RuntimeException(e);
         }
         long retrievalTime = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Price returned after " + retrievalTime + "ms");
