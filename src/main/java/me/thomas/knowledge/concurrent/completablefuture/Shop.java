@@ -39,6 +39,10 @@ public class Shop {
         return future;
     }
 
+    public Future<Double> getPrice2Async(String product) {
+        return CompletableFuture.supplyAsync(() -> getPrice(product));
+    }
+
     private static void delay() {
         try {
             TimeUnit.SECONDS.sleep(1);
@@ -49,7 +53,7 @@ public class Shop {
     public static void main(String[] args) {
         Shop shop = new Shop("BestShop");
         long start = System.nanoTime();
-        Future<Double> futurePrice = shop.getPriceAsync("");
+        Future<Double> futurePrice = shop.getPrice2Async("");
         long invocationTime = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Invocation returned after " + invocationTime + "ms");
         try {
