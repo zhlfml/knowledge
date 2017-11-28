@@ -3,6 +3,7 @@ package me.thomas.knowledge.concurrent.completablefuture;
 import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
@@ -45,6 +46,10 @@ public class Shop {
 
     public CompletableFuture<String> getPrice2Async(String product) {
         return CompletableFuture.supplyAsync(() -> name + " price is " + getPrice(product));
+    }
+
+    public CompletableFuture<String> getPrice3Async(String product, Executor executor) {
+        return CompletableFuture.supplyAsync(() -> name + " price is " + getPrice(product), executor);
     }
 
     private static void delay() {
