@@ -21,6 +21,10 @@ public class Shop {
         this.name = name;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public double getPrice(String product) {
         delay();
         return rnd.nextDouble() * product.charAt(0) + product.charAt(1);
