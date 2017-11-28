@@ -2,6 +2,7 @@ package me.thomas.knowledge.concurrent.completablefuture;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import static java.util.stream.Collectors.toList;
 
@@ -19,6 +20,32 @@ public class ComparePriceWebSite {
                 .collect(toList());
     }
 
+    public List<String> findPricesV2(List<Shop> shops, String product) {
+        return shops.parallelStream()
+                .map(shop -> String.format("%s price is %.2f", shop.getName(), shop.getPrice(product)))
+                .collect(toList());
+    }
+
+    public List<String> findPricesV3(List<Shop> shops, String product) {
+        return shops.stream()
+                .map(shop -> shop.getPrice2Async(product))
+                .map(CompletableFuture::join)
+                .collect(toList());
+    }
+
+    public List<String> findPricesV4(List<Shop> shops, String product) {
+        long start = System.nanoTime();
+        List<CompletableFuture<String>> futures =  shops.stream()
+                .map(shop -> shop.getPrice2Async(product))
+                .collect(toList());
+        long duration = (System.nanoTime() - start) / 1_000_000;
+        System.out.println("Done in " + duration + "ms");
+
+        return futures.stream()
+                .map(CompletableFuture::join)
+                .collect(toList());
+    }
+
     public static void main(String[] args) {
         List<Shop> shops = Arrays.asList(new Shop("BestPrice"),
                 new Shop("LetsSaveBig"),
@@ -27,7 +54,7 @@ public class ComparePriceWebSite {
 
         ComparePriceWebSite webSite = new ComparePriceWebSite();
         long start = System.nanoTime();
-        System.out.println(webSite.findPricesV1(shops, "iphoneX"));
+        System.out.println(webSite.findPricesV4(shops, "iphoneX"));
         long duration = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Done in " + duration + "ms");
     }

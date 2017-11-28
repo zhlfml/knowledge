@@ -30,12 +30,12 @@ public class Shop {
         return rnd.nextDouble() * product.charAt(0) + product.charAt(1);
     }
 
-    public Future<Double> getPriceAsync(String product) {
-        CompletableFuture<Double> future = new CompletableFuture<>();
+    public Future<String> getPriceAsync(String product) {
+        CompletableFuture<String> future = new CompletableFuture<>();
         new Thread(() -> {
             try {
                 double price = getPrice(product);
-                future.complete(price);
+                future.complete(name + " price is " + price);
             } catch (Exception ex) {
                 future.completeExceptionally(ex);
             }
@@ -43,8 +43,8 @@ public class Shop {
         return future;
     }
 
-    public Future<Double> getPrice2Async(String product) {
-        return CompletableFuture.supplyAsync(() -> getPrice(product));
+    public CompletableFuture<String> getPrice2Async(String product) {
+        return CompletableFuture.supplyAsync(() -> name + " price is " + getPrice(product));
     }
 
     private static void delay() {
@@ -57,12 +57,12 @@ public class Shop {
     public static void main(String[] args) {
         Shop shop = new Shop("BestShop");
         long start = System.nanoTime();
-        Future<Double> futurePrice = shop.getPrice2Async("");
+        Future<String> futurePrice = shop.getPrice2Async("");
         long invocationTime = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Invocation returned after " + invocationTime + "ms");
         try {
-            double price = futurePrice.get(2, TimeUnit.SECONDS);
-            System.out.printf("Price is %.2f%n", price);
+            String price = futurePrice.get(2, TimeUnit.SECONDS);
+            System.out.printf(price);
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         } catch (ExecutionException e) {
