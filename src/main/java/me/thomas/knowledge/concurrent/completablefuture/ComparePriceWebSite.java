@@ -97,7 +97,6 @@ public class ComparePriceWebSite {
     }
 
     public static void main(String[] args) {
-        System.out.println(Runtime.getRuntime().availableProcessors());
         List<Shop> shops = Arrays.asList(
                 new Shop("BestPrice"),
                 new Shop("LetsSaveBig"),

@@ -1,5 +1,6 @@
 package me.thomas.knowledge.concurrent.completablefuture;
 
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -10,10 +11,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class Delay {
 
+    private static final Random rnd = new Random();
+
     public static void delay(int seconds) {
         try {
             TimeUnit.SECONDS.sleep(seconds);
-        } catch (InterruptedException ignored) {
-        }
+        } catch (InterruptedException ignored) {}
+    }
+
+    public static void delayRandom(int lowestMilliSeconds) {
+        try {
+            TimeUnit.MILLISECONDS.sleep(lowestMilliSeconds + rnd.nextInt(3000));
+        } catch (InterruptedException ignored) {}
     }
 }
