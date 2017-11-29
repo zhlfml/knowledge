@@ -2,6 +2,7 @@ package me.thomas.knowledge.concurrent.completablefuture;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -73,6 +74,28 @@ public class ComparePriceWebSite {
                 .collect(toList());
     }
 
+    /**
+     * 并发执行示意图，Combine内的Future会和上一个Future同时进行
+     * --------------------------------------------------
+     * - getPrice3 |  getRandomInt |                    -
+     * ----------------------------|     getExchange    -
+     * -      getDiscount          |                    -
+     * --------------------------------------------------
+     */
+    public List<String> findPricesV7(List<Shop> shops, String product) {
+        List<CompletableFuture<String>> futures = shops.stream()
+                .map(shop -> shop.getPrice3Async(product, executor))
+                .map(future -> future.thenCombine(CompletableFuture.supplyAsync(() -> {Delay.delay(1); return new Random().nextInt();}, executor), (shop, name) -> name + "_hack_" + shop))
+                .map(future -> future.thenApply(Quote::parse))
+                .map(future -> future.thenCompose(quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)))
+                .map(future -> future.thenCombine(CompletableFuture.supplyAsync(Exchange::rate), (price , rate) -> price + "*" + rate))
+                .collect(toList());
+
+        return futures.stream()
+                .map(CompletableFuture::join)
+                .collect(toList());
+    }
+
     public static void main(String[] args) {
         System.out.println(Runtime.getRuntime().availableProcessors());
         List<Shop> shops = Arrays.asList(
@@ -83,7 +106,7 @@ public class ComparePriceWebSite {
 
         ComparePriceWebSite webSite = new ComparePriceWebSite();
         long start = System.nanoTime();
-        System.out.println(webSite.findPricesV6(shops, "iphoneX"));
+        System.out.println(webSite.findPricesV7(shops, "iphoneX"));
         long duration = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Done in " + duration + "ms");
     }
