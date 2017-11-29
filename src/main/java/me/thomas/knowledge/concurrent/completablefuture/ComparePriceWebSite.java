@@ -61,16 +61,29 @@ public class ComparePriceWebSite {
                 .collect(toList());
     }
 
+    public List<String> findPricesV6(List<Shop> shops, String product) {
+        List<CompletableFuture<String>> futures = shops.stream()
+                .map(shop -> shop.getPrice3Async(product, executor))
+                .map(future -> future.thenApply(Quote::parse))
+                .map(future -> future.thenCompose(quote -> CompletableFuture.supplyAsync(() -> Discount.applyDiscount(quote), executor)))
+                .collect(toList());
+
+        return futures.stream()
+                .map(CompletableFuture::join)
+                .collect(toList());
+    }
+
     public static void main(String[] args) {
         System.out.println(Runtime.getRuntime().availableProcessors());
-        List<Shop> shops = Arrays.asList(new Shop("BestPrice"),
+        List<Shop> shops = Arrays.asList(
+                new Shop("BestPrice"),
                 new Shop("LetsSaveBig"),
                 new Shop("MyFavoriteShop"),
                 new Shop("BuyItAll"));
 
         ComparePriceWebSite webSite = new ComparePriceWebSite();
         long start = System.nanoTime();
-        System.out.println(webSite.findPricesV5(shops, "iphoneX"));
+        System.out.println(webSite.findPricesV6(shops, "iphoneX"));
         long duration = (System.nanoTime() - start) / 1_000_000;
         System.out.println("Done in " + duration + "ms");
     }

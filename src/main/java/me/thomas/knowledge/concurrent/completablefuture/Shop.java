@@ -26,17 +26,18 @@ public class Shop {
         return name;
     }
 
-    public double getPrice(String product) {
-        delay();
-        return rnd.nextDouble() * product.charAt(0) + product.charAt(1);
+    public String getPrice(String product) {
+        double price = calculatePrice(product);
+        Discount.Code code = Discount.Code.values()[rnd.nextInt(Discount.Code.values().length)];
+        return String.format("%s:%.2f:%s", name, price, code);
     }
 
     public Future<String> getPriceAsync(String product) {
         CompletableFuture<String> future = new CompletableFuture<>();
         new Thread(() -> {
             try {
-                double price = getPrice(product);
-                future.complete(name + " price is " + price);
+                String price = getPrice(product);
+                future.complete(price);
             } catch (Exception ex) {
                 future.completeExceptionally(ex);
             }
@@ -45,18 +46,16 @@ public class Shop {
     }
 
     public CompletableFuture<String> getPrice2Async(String product) {
-        return CompletableFuture.supplyAsync(() -> name + " price is " + getPrice(product));
+        return CompletableFuture.supplyAsync(() -> getPrice(product));
     }
 
     public CompletableFuture<String> getPrice3Async(String product, Executor executor) {
-        return CompletableFuture.supplyAsync(() -> name + " price is " + getPrice(product), executor);
+        return CompletableFuture.supplyAsync(() -> getPrice(product), executor);
     }
 
-    private static void delay() {
-        try {
-            TimeUnit.SECONDS.sleep(1);
-        } catch (InterruptedException ignored) {
-        }
+    private double calculatePrice(String product) {
+        Delay.delay(1);
+        return rnd.nextDouble() * product.charAt(0) + product.charAt(1);
     }
 
     public static void main(String[] args) {
