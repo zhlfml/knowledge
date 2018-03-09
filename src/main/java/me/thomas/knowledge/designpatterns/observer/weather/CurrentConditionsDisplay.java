@@ -17,6 +17,8 @@ public class CurrentConditionsDisplay implements Observer, DisplayElement {
 	}
 	
 	public void display() {
+		// 检查是谁加载了该类
+		System.out.println("classloader = " + getClass().getClassLoader());
 		System.out.println("Current conditions: " + temperature 
 			+ "F degrees and " + humidity + "% humidity");
 	}

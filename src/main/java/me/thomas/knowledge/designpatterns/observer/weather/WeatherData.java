@@ -12,6 +12,13 @@ public class WeatherData implements Subject {
 		observers = new ArrayList();
 	}
 
+	// 用于classloader测试
+	public void autoRegisterObserver() {
+		new CurrentConditionsDisplay(this);
+		new StatisticsDisplay(this);
+		new ForecastDisplay(this);
+	}
+
 	public void registerObserver(Observer o) {
 		observers.add(o);
 	}
