@@ -1,9 +1,9 @@
 package me.thomas.knowledge.stream;
 
+import java.time.LocalDate;
 import java.util.Comparator;
 import java.util.OptionalInt;
 import java.util.function.IntSupplier;
-import java.util.stream.Collector;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -22,6 +22,9 @@ public class ReduceTutorial {
             System.out.println(optional.getAsInt());
         }
 
+        // 生成一个月内的日期
+        Stream.iterate(LocalDate.now(), day -> day.plusDays(1)).limit(30).forEach(System.out::println);
+
         Stream.iterate(new int[] {0, 1}, arr -> new int[] {arr[1], arr[0] + arr[1] })
                 .limit(20)
                 .forEach(arr -> System.out.print("[" + arr[0] + "," + arr[1] + "]"));
@@ -29,8 +32,8 @@ public class ReduceTutorial {
 
         int sum = Stream.iterate(new int[] {0, 1}, arr -> new int[] {arr[1], arr[0] + arr[1] })
                 .limit(20)
-                .map(arr -> arr[0])
-                .reduce(0, (a, b) -> a + b);
+                .mapToInt(arr -> arr[0])
+                .sum();
         System.out.println(sum);
 
         Stream.iterate(new int[] {0, 1}, arr -> new int[] {arr[1], arr[0] + arr[1] })

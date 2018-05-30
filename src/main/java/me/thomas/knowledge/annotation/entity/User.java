@@ -24,6 +24,8 @@ public class User implements Entity {
     @Column("email")
     private String email;
 
+    private String admin;
+
     public int getId() {
         return id;
     }
@@ -54,5 +56,14 @@ public class User implements Entity {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Column("admin")
+    public String getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(String admin) {
+        this.admin = admin;
     }
 }

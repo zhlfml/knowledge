@@ -3,6 +3,7 @@ package me.thomas.knowledge.stream;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
@@ -34,5 +35,11 @@ public class FlatMapTutorial {
                         .map(j -> new int[] {i, j}))
                 .collect(Collectors.toList());
         System.out.println(pair2);
+
+        // 100以内的勾股数
+        IntStream.rangeClosed(1, 100).boxed()
+                .flatMap(a -> IntStream.rangeClosed(a, 100).mapToObj(b -> new double[] {a, b, Math.sqrt(a * a + b * b)}))
+                .filter(t -> t[2] % 1.0 == 0)
+                .forEach(t -> System.out.println("[" + t[0] + ", " + t[1] + "," + t[2] +  "]"));
     }
 }

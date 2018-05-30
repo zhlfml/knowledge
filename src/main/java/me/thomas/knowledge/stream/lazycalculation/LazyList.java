@@ -15,6 +15,7 @@ public class LazyList<T> implements MyList<T> {
     public LazyList(T head, Supplier<LazyList<T>> tail) {
         this.head = head;
         this.tail = tail;
+//        System.out.println("LazyList Constructor head: " + head);
     }
 
     @Override
@@ -24,7 +25,10 @@ public class LazyList<T> implements MyList<T> {
 
     @Override
     public LazyList<T> tail() {
-        return tail.get();
+//        System.out.println("head before tail.get: " + head);
+        LazyList<T> tailLazyList = tail.get();
+//        System.out.println("head after tail.get: " + tailLazyList.head);
+        return tailLazyList;
     }
 
     @Override
@@ -33,11 +37,19 @@ public class LazyList<T> implements MyList<T> {
     }
 
     public LazyList<T> filter(Predicate<T> p) {
-        return isEmpty() ?
-                this :
-                p.test(head()) ?
-                        new LazyList<>(head(), () -> tail().filter(p)) :
-                        tail().filter(p);
+        System.out.println("head() in filter: " + head);
+        if (p.test(head)) {
+            System.out.println("return new LazyList");
+            return new LazyList<>(
+                    head,
+                    () ->
+                            tail()
+                                    .filter(p));
+        } else {
+            System.out.println("filter next number");
+            return tail()
+                    .filter(p);
+        }
     }
 
 }

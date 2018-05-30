@@ -1,7 +1,5 @@
 package me.thomas.knowledge.stream.lazycalculation;
 
-import java.util.function.Predicate;
-
 /**
  * @author zhaoxinsheng
  * @date 31/01/2018.

@@ -25,7 +25,7 @@ public class Selector {
             Table table = (Table) clazz.getDeclaredAnnotation(Table.class);
             sb.append(table.value());
             sb.append(" WHERE 1 = 1 ");
-            Field[] fields = clazz.getDeclaredFields();
+            Field[] fields = clazz.getDeclaredFields(); // 所有申明的字段，包括private, protected, public。但是不包含父类继承的字段。
             for (Field field : fields) {
                 if (field.isAnnotationPresent(Column.class)) {
                     String getMethodName = "get" + StringUtil.upperCaseFirstLetter(field.getName());
@@ -57,6 +57,19 @@ public class Selector {
                 }
             }
         }
+
+        // 测试方法继承时，能否继承方法的注解。（该注解没有@Inherited）: 测试结果，可以继承。
+        // 也就是说，方法上的注解能自动继承。与该注解是否有定义@Inherited无关。
+        try {
+            Method method = clazz.getMethod("getAdmin");
+            if (method.isAnnotationPresent(Column.class)) {
+                Column column = method.getAnnotation(Column.class);
+                String value = column.value();
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+
         return sb.toString();
     }
 }

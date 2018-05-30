@@ -1,6 +1,7 @@
 package me.thomas.knowledge.bpm.activiti;
 
 import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricVariableInstance;
 import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -22,6 +23,12 @@ public class TenMinuteTutorial {
         RepositoryService repositoryService = processEngine.getRepositoryService();
         RuntimeService runtimeService =  processEngine.getRuntimeService();
         TaskService taskService = processEngine.getTaskService();
+        HistoryService historyService = processEngine.getHistoryService();
+
+        // first task id
+        String firstTaskId = null;
+        // second task id
+        String secondTaskId = null;
 
         // Deploy process
         String processDefinitionId = null;
@@ -60,6 +67,7 @@ public class TenMinuteTutorial {
         tasks = taskService.createTaskQuery().taskAssignee("thomas").active().list();
         System.out.println("thomas' tasks count => " + tasks.size());
         for (Task task : tasks) {
+            firstTaskId = task.getId();
             System.out.println("first task.getId() => " + task.getId());
             // complete it
             variables = new HashMap<String, Object>();
@@ -91,9 +99,27 @@ public class TenMinuteTutorial {
         tasks = taskService.createTaskQuery().taskAssignee(hr).active().list();
         System.out.println(hr + "'s tasks count => " + tasks.size());
         for (Task task : tasks) {
+            secondTaskId = task.getId();
             System.out.println("second task.getId() => " + task.getId());
             // complete it
             taskService.complete(task.getId());
+        }
+
+        // 使用taskId似乎检索不出数据 -- ACT_HI_VARINST表中PROC_INST_ID_字段有数据,但是TASK_ID_字段无数据
+        List<HistoricVariableInstance> firstTaskVariables = historyService.createHistoricVariableInstanceQuery().taskId(firstTaskId).list();
+        for (HistoricVariableInstance variableInstance : firstTaskVariables) {
+            System.out.println("first task: " +  variableInstance.getVariableName() + " = " + variableInstance.getValue());
+        }
+
+        List<HistoricVariableInstance> secondTaskVariables = historyService.createHistoricVariableInstanceQuery().taskId(secondTaskId).list();
+        for (HistoricVariableInstance variableInstance : secondTaskVariables) {
+            System.out.println("second task: " + variableInstance.getVariableName() + " = " + variableInstance.getValue());
+        }
+
+        // 使用processInstanceId就能查询出数据
+        List<HistoricVariableInstance> historicVariableInstances = historyService.createHistoricVariableInstanceQuery().processInstanceId(processInstanceId).list();
+        for (HistoricVariableInstance variableInstance : historicVariableInstances) {
+            System.out.println("process : " +  variableInstance.getVariableName() + " = " + variableInstance.getValue());
         }
 
     }

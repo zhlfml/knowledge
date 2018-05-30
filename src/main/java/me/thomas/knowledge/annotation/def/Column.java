@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * @author zhaoxinsheng
  * @date 8/7/16.
  */
-@Target(ElementType.FIELD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Column {
     String value();
