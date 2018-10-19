@@ -27,9 +27,15 @@ public class Shop {
     }
 
     public String getPrice(String product) {
+        System.out.println(Thread.currentThread().getId() + ": " + System.currentTimeMillis());
         double price = calculatePrice(product);
         Discount.Code code = Discount.Code.values()[rnd.nextInt(Discount.Code.values().length)];
         return String.format("%s:%.2f:%s", name, price, code);
+    }
+
+    public double getPriceV2(String product) {
+        System.out.println(Thread.currentThread().getId() + ": " + System.currentTimeMillis());
+        return calculatePrice(product);
     }
 
     public Future<String> getPriceAsync(String product) {
