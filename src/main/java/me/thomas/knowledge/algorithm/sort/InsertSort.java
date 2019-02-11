@@ -16,6 +16,7 @@ public class InsertSort {
             if (array[i] < array[i - 1]) {
                 int j = i - 1;
                 int temp = array[i];
+                // 从右到左的循环
                 for (; j >= 0 && array[j] > temp; j--) {
                     array[j + 1] = array[j];
                 }
