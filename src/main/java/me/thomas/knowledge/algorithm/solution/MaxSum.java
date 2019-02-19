@@ -3,7 +3,7 @@ package me.thomas.knowledge.algorithm.solution;
 /**
  * 问题：输入一个具有n个整数的向量x，输出向量的任何连续子向量中的最大和。
  * 例如：输入为31,-41,59,26,-53,58,97,-93,-23,84，则输出为x[2..6]的总和，即187。
- *
+ * <p>
  * Created by Thomas on 2016/1/13.
  */
 public class MaxSum {
@@ -22,7 +22,7 @@ public class MaxSum {
     }
 
     public static void main(String[] args) {
-        int[] array = new int[] {31,-41,59,26,-53,58,97,-93,-23,84};
+        int[] array = new int[]{31, -41, 59, 26, -53, 58, 97, -93, -23, 84};
         System.out.println(solve(array));
     }
 }
