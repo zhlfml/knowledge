@@ -20,7 +20,7 @@ public class Exercise4 {
         boolean negative = false;
         if (value < 0) {
             negative = true;
-            value = 0 - value;
+            value = -value;
         }
         int i = 0;
         char[] result = new char[33];
@@ -31,14 +31,15 @@ public class Exercise4 {
         if (negative) {
             result[i++] = '-';
         }
-        return new String(reverse(result, i));
+        reverse(result, 0, i - 1);
+        return new String(result, 0, i);
     }
 
-    private static char[] reverse(char[] chars, int length) {
-        char[] result = new char[length];
-        for (int i = length - 1, j = 0; i >= 0; i--) {
-            result[j++] = chars[i];
+    private static void reverse(char[] chars, int start, int end) {
+        for (int i = start, j = end; i < j; i++, j--) {
+            char c = chars[i];
+            chars[i] = chars[j];
+            chars[j] = c;
         }
-        return result;
     }
 }

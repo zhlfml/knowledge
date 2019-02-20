@@ -6,51 +6,54 @@ package me.thomas.knowledge.algorithm.epic;
  */
 public class Exercise3 {
 
-    public static String walk(int[][] matrix) {
+    public static String traverse(int[][] matrix) {
         if (matrix == null) {
             throw new IllegalArgumentException("matrix is null");
         }
+        // boundary
         int top = 0,
-                down = matrix.length,
-                right = matrix[0].length,
-                left = 0;
-        int i = 0,
-                j = 0,
-                // the end position
-                endi = matrix.length / 2,
-                endj = matrix[0].length / 2;
+                left = 0,
+                down = matrix.length - 1,
+                right = matrix[0].length - 1;
         // current position
-        char dir = 'R';
-        StringBuilder builder = new StringBuilder(down * right * 11);
-        builder.append(matrix[i][j]);
-        for (; !(i == endi && j == endj); ) {
-            switch (dir) {
+        int i = 0,
+                j = -1;
+        // traverse direction
+        char direction = 'R';
+        int arrived = 0,
+                total = (down + 1) * (right + 1);
+        StringBuilder builder = new StringBuilder(total * 11);
+        while (arrived < total) {
+            switch (direction) {
                 case 'R': // Right
-                    if (++j == right - 1) {
+                    if (++j == right) {
                         top++;
-                        dir = 'D';
+                        direction = 'D';
                     }
                     break;
                 case 'D': // Down
-                    if (++i == down - 1) {
+                    if (++i == down) {
                         right--;
-                        dir = 'L';
+                        direction = 'L';
                     }
                     break;
                 case 'L': // Left
                     if (--j == left) {
                         down--;
-                        dir = 'U';
+                        direction = 'U';
                     }
                     break;
                 case 'U': // Up
                     if (--i == top) {
                         left++;
-                        dir = 'R';
+                        direction = 'R';
                     }
                     break;
             }
-            builder.append(',').append(matrix[i][j]);
+            if (arrived++ > 0) {
+                builder.append(',');
+            }
+            builder.append(matrix[i][j]);
         }
         return builder.toString();
     }
