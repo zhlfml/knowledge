@@ -33,12 +33,31 @@ public class Exercise3Test {
     }
 
     @Test
+    public void traverse_23() {
+        int[][] matrix = new int[][]{
+                {2, 3, 4},
+                {5, 7, 9}
+        };
+        assertEquals("2,3,4,9,7,5", Exercise3.traverse(matrix));
+    }
+
+    @Test
     public void traverse_24() {
         int[][] matrix = new int[][]{
                 {2, 3, 4, 8},
                 {5, 7, 9, 12}
         };
         assertEquals("2,3,4,8,12,9,7,5", Exercise3.traverse(matrix));
+    }
+
+    @Test
+    public void traverse_33() {
+        int[][] matrix = new int[][]{
+                {2, 3, 4},
+                {5, 7, 9},
+                {1, 0, 6}
+        };
+        assertEquals("2,3,4,9,6,0,1,5,7", Exercise3.traverse(matrix));
     }
 
     @Test
