@@ -104,7 +104,7 @@ public class ComparePriceWebSite {
     }
 
     /**
-     * 并发执行示意图，Combine内的Future会和上一个Future同时进行
+     * 并发执行示意图，Combine内的Future会和上一个Future同时进行 (时间线：从上往下流逝)
      * --------------------------------------------------
      * - getPrice3 |  getRandomInt |                    -
      * ----------------------------|     getExchange    -

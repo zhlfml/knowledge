@@ -16,6 +16,12 @@ public class Exercise3Test {
     }
 
     @Test
+    public void traverse_00() {
+        int[][] matrix = new int[0][0];
+        assertEquals("", Exercise3.traverse(matrix));
+    }
+
+    @Test
     public void traverse_11() {
         int[][] matrix = new int[][]{
                 {2}

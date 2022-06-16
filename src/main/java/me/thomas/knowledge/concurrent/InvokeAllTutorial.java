@@ -72,11 +72,13 @@ public class InvokeAllTutorial {
             return fibonacci.fib(number);
         }
 
+        // 相当于任务失败之后的后备方案
         public Long getFailureResult() {
             System.out.println("getFailureResult(" + this.number + ")");
             return fibonacci.fib2(number);
         }
 
+        // 相当于任务超时之后的后备方案
         public Long getTimeoutResult() {
             System.out.println("getTimeoutResult(" + this.number + ")");
             return fibonacci.fib2(number);

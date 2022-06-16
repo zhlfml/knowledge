@@ -7,6 +7,7 @@ public class MatchMakingTestDrive {
 	Hashtable datingDB = new Hashtable();
  	
 	public static void main(String[] args) {
+		System.getProperties().setProperty("sun.misc.ProxyGenerator.saveGeneratedFiles", "true");
 		MatchMakingTestDrive test = new MatchMakingTestDrive();
 		test.drive();
 	}

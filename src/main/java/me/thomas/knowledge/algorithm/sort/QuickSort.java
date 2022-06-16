@@ -12,15 +12,17 @@ public class QuickSort {
         if (low >= high) {
             return;
         }
-        int pivot = array[low];
-        int i = low + 1, j = high;
+        int pivot = array[low]; // 第一个用来做被比较数
+        int i = low + 1,
+                j = high;
         while (true) {
-            while (i <= high && array[i] < pivot) {
-                i++;
-            }
             // 这里不需要判断j >= low, 因为移到low时，array[low] == pivot
             while (array[j] > pivot) {
                 j--;
+            }
+            // 先缩小j的值可以提高性能，因为i < j可以少比较一些元素
+            while (array[i] < pivot && i < j) {
+                i++;
             }
             if (i >= j) {
                 break;
@@ -33,9 +35,17 @@ public class QuickSort {
     }
 
     private static void swap(int[] array, int i, int j) {
+        System.out.println("swap(" + array[i] + ", " + array[j] + ")");;
         int temp = array[i];
         array[i] = array[j];
         array[j] = temp;
+        print(array);
     }
 
+    private static void print(int[] array) {
+        for (int i = 0; i < array.length; i++) {
+            System.out.print(array[i] + "\t");
+        }
+        System.out.println("\n");
+    }
 }

@@ -11,18 +11,23 @@ import java.util.List;
 public class BagSolution {
 
     public static void main(String[] args) {
-        Bag bag = new Bag(9);
+        Bag bag = new Bag(49);
         List<Gemstone> gemstones = Arrays.asList(
                 new Gemstone(20, 5),
-                new Gemstone(10, 4),
-                new Gemstone(12, 3),
-                new Gemstone(9, 2)
+                new Gemstone(36, 8),
+                new Gemstone(22, 7),
+                new Gemstone(16, 4),
+                new Gemstone(32, 9),
+                new Gemstone(44, 10),
+                new Gemstone(56, 12),
+                new Gemstone(18, 3),
+                new Gemstone(27, 6)
         );
 
         // 定义二维数组来存放所有的情况: 宝石从少到多，剩余容量从多到少。
         // 因为所有情况包括一颗宝石都不存放的情况，所以第一维数组包括0[], 1[], 2[], ..., gemstones.size()[]等情况。
         // 所以第一维数组的大小为gemstones.size() + 1，同理第二维数组的大小为bag.getCapacity() + 1。
-        int table[][] = new int[gemstones.size() + 1][bag.getCapacity() + 1];
+        int[][] table = new int[gemstones.size() + 1][bag.getCapacity() + 1];
         for (int i = 0, len = gemstones.size(); i <= len; i++) { // i表示前i个宝石
             for (int j = bag.getCapacity(); j > 0; j--) { // j表示当前背包剩余容量
                 if (i == 0) {
@@ -31,12 +36,8 @@ public class BagSolution {
                 else if (j >= gemstones.get(i - 1).getWeight()) {
                     // 如果放入第i个宝石的总价值大于不放入时的价值。table[i - 1][j]表示不计当前宝石，在这之前放入背包宝石的最大价值。
                     // 当然此时前i-1个宝石的剩余容量为j-gemstones.get(i-1).getWeight()
-                    if (table[i - 1][j - gemstones.get(i - 1).getWeight()] + gemstones.get(i - 1).getPrice() > table[i - 1][j]) {
-                        table[i][j] = table[i - 1][j - gemstones.get(i - 1).getWeight()] + gemstones.get(i - 1).getPrice();
-                    } // 如果强硬放入当前的宝石而导致背包中总的价值反而更低，也就说明前i个宝石，综合下来最大的价值和前i-1个宝石的价值相同。
-                    else {
-                        table[i][j] = table[i - 1][j];
-                    }
+                    // 如果强硬放入当前的宝石而导致背包中总的价值反而更低，也就说明前i个宝石，综合下来最大的价值和前i-1个宝石的价值相同。
+                    table[i][j] = Math.max(table[i - 1][j - gemstones.get(i - 1).getWeight()] + gemstones.get(i - 1).getPrice(), table[i - 1][j]);
                 }
             }
         }

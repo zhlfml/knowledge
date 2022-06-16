@@ -7,14 +7,14 @@ package me.thomas.knowledge.algorithm.epic;
 public class Exercise3 {
 
     public static String traverse(int[][] matrix) {
-        if (matrix == null) {
+        if (matrix == null || matrix.length == 0) {
             throw new IllegalArgumentException("matrix is null");
         }
         // boundary
         int top = 0,
                 left = 0,
                 down = matrix.length - 1,
-                right = matrix[0].length - 1;
+                right = matrix[0].length - 1; // 访问数组元素需要考虑越界异常
         // current position
         int i = 0,
                 j = -1;

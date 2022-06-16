@@ -12,7 +12,8 @@ public class Fibonacci {
 
     private static final Fibonacci instance = new Fibonacci();
 
-    private Fibonacci() {}
+    private Fibonacci() {
+    }
 
     public static Fibonacci getInstance() {
         return instance;
@@ -42,4 +43,38 @@ public class Fibonacci {
         return result;
     }
 
+    public long fib3(long n) {
+        // write code here
+        int f0 = 1;
+        int f1 = 1;
+        int f2 = 0;
+
+        for(int i = 2; i < n; i++){
+            f2 = f0 + f1;
+            f0 = f1;
+            f1 = f2;
+        }
+        return f2;
+    }
+
+    private void clearCache() {
+        map.clear();
+    }
+
+    public static void main(String[] args) {
+        long startTime = System.nanoTime();
+        for (int i = 0; i < 100_000_000; i++) {
+            Fibonacci fibonacci = Fibonacci.getInstance();
+            fibonacci.fib2(89);
+            fibonacci.clearCache();
+        }
+        System.out.println((System.nanoTime() - startTime) / 1000_000);
+
+        long startTime2 = System.nanoTime();
+        for (int i = 0; i < 100_000_000; i++) {
+            Fibonacci.getInstance().fib3(89);
+        }
+        System.out.println((System.nanoTime() - startTime2) / 1000_000);
+
+    }
 }

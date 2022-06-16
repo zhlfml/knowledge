@@ -11,6 +11,13 @@ import static org.junit.Assert.assertArrayEquals;
 public class QuickSortTest {
 
     @Test
+    public void sort_0() {
+        int[] array = {7, 1, 5, 4, 8, 2};
+        QuickSort.sort(array, 0, array.length - 1);
+        assertArrayEquals(new int[]{1, 2, 4, 5, 7, 8}, array);
+    }
+
+    @Test
     public void sort_1() {
         int[] array = {21, 21, 20, 19, 18, 17, 16, 15, 14};
         QuickSort.sort(array, 0, array.length - 1);

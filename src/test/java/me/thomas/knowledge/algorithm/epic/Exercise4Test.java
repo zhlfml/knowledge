@@ -59,6 +59,7 @@ public class Exercise4Test {
 
     @Test
     public void itoa_5() {
+        System.out.println(Integer.toString(Integer.MIN_VALUE, 2));
         assertEquals("-10000000000000000000000000000000", Exercise4.itoa(Integer.MIN_VALUE, 2));
         assertEquals("-20000000000", Exercise4.itoa(Integer.MIN_VALUE, 8));
         assertEquals("-2147483648", Exercise4.itoa(Integer.MIN_VALUE, 10));
