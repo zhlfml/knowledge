@@ -1,8 +1,6 @@
 package me.thomas.knowledge.algorithm.leetcode.graph;
 
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.*;
 
 /**
  * 有 n 个网络节点，标记为1到 n。
@@ -18,15 +16,12 @@ import java.util.PriorityQueue;
 public class Solution743 {
 
     public int networkDelayTime(int[][] times, int n, int k) {
-        int[][] graph = new int[n][n];
-        /*
-         * 延迟允许为0，所以默认值设置为-1
-         */
-        for (int[] row : graph) {
-            Arrays.fill(row, -1);
+        List<Delay>[] graph = new List[n];
+        for (int i = 0; i < n; i++) {
+            graph[i] = new ArrayList<>(n);
         }
         for (int[] time : times) {
-            graph[time[0] - 1][time[1] - 1] = time[2];
+            graph[time[0] - 1].add(new Delay(time[1] - 1, time[2]));
         }
 
         /*
@@ -45,10 +40,8 @@ public class Solution743 {
             }
             visited[v.vertex] = true;
             answer[v.vertex] = v.time;
-            for (int i = 0; i < n; i++) {
-                if (graph[v.vertex][i] >= 0) {
-                    priorityQueue.offer(new Delay(i, v.time + graph[v.vertex][i]));
-                }
+            for (Delay delay : graph[v.vertex]) {
+                priorityQueue.offer(new Delay(delay.vertex, v.time + delay.time));
             }
         }
 
