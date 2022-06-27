@@ -27,10 +27,6 @@ public class LRUCache {
      */
     private final DoubleLinkedList   doubleLinkedList;
     private final int                capacity;
-    /**
-     * 存放的缓存的条目数量
-     */
-    private       int                size;
 
     public LRUCache(int capacity) {
         this.map = new HashMap<>((int) (capacity / .75) + 1);
@@ -51,10 +47,8 @@ public class LRUCache {
         Node exist = map.get(key);
         if (exist != null) {
             delete(exist);
-        } else if (size == capacity) {
-            delete(doubleLinkedList.head.next);
-        } else {
-            size++;
+        } else if (doubleLinkedList.size() == capacity) {
+            deleteOldest();
         }
         addRecently(new Node(key, value));
     }
@@ -83,6 +77,12 @@ public class LRUCache {
         doubleLinkedList.deleteNode(node);
     }
 
+    private void deleteOldest() {
+        Node node = doubleLinkedList.firstNode();
+        map.remove(node.key);
+        doubleLinkedList.deleteNode(node);
+    }
+
     static class Node {
         int  key;
         int  value;
@@ -100,6 +100,10 @@ public class LRUCache {
     static class DoubleLinkedList {
         Node head;
         Node tail;
+        /**
+         * 缓存的条目等于双链表维护的node的节点的数量，所以由双链表维护比较好。
+         */
+        int  size;
 
         public DoubleLinkedList() {
             this.head = new Node(0, 0);
@@ -115,6 +119,7 @@ public class LRUCache {
             node.prev.next = node.next;
             node.next.prev = node.prev;
             node.prev = node.next = null;
+            this.size--;
         }
 
         /**
@@ -125,6 +130,15 @@ public class LRUCache {
             node.next = this.tail;
             node.prev.next = node;
             node.next.prev = node;
+            this.size++;
+        }
+
+        Node firstNode() {
+            return this.head.next;
+        }
+
+        int size() {
+            return this.size;
         }
     }
 
