@@ -26,6 +26,10 @@ public class LFUCache {
     private final Map<Integer, Node> map;
     private final Heap               heap;
     private final int                capacity;
+    /**
+     * 记录缓存被访问的模拟时间，从0开始，没访问一次加1，目的是为了让每个缓存的最近访问时间与其他必不相同。
+     */
+    private       long               accessTime = 0L;
 
     public LFUCache(int capacity) {
         this.map = new HashMap<>((int) (capacity / .75 + 1));
@@ -52,12 +56,12 @@ public class LFUCache {
         if (heap.size() == capacity) {
             deleteLeastHitCache();
         }
-        addNewCache(new Node(key, value));
+        addNewCache(new Node(key, value, accessTime++));
     }
 
     private void access(Node node) {
         node.hitCount++;
-        node.accessTime = System.currentTimeMillis();
+        node.accessTime = accessTime++;
         heap.siftDown(node.index);
     }
 
@@ -105,11 +109,11 @@ public class LFUCache {
          */
         int  index;
 
-        public Node(int key, int value) {
+        public Node(int key, int value, long accessTime) {
             this.key = key;
             this.value = value;
             this.hitCount = 1;
-            this.accessTime = System.currentTimeMillis();
+            this.accessTime = accessTime;
             this.index = -1;
         }
 
