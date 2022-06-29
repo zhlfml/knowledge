@@ -42,7 +42,7 @@ public class LFUCache {
         if (cache == null) {
             return -1;
         }
-        access(cache);
+        touch(cache);
         return cache.value;
     }
 
@@ -50,16 +50,16 @@ public class LFUCache {
         Node cache = map.get(key);
         if (cache != null) {
             cache.value = value;
-            access(cache);
+            touch(cache);
             return;
         }
         if (heap.size() == capacity) {
             deleteLeastHitCache();
         }
-        addNewCache(new Node(key, value, accessTime++));
+        addNewCache(new Node(key, value));
     }
 
-    private void access(Node node) {
+    private void touch(Node node) {
         node.hitCount++;
         node.accessTime = accessTime++;
         heap.siftDown(node.index);
@@ -87,7 +87,7 @@ public class LFUCache {
     /**
      * 缓存的基本单位 -- node
      */
-    static class Node implements Comparable<Node> {
+    class Node implements Comparable<Node> {
         /**
          * 缓存的key
          */
@@ -109,11 +109,11 @@ public class LFUCache {
          */
         int  index;
 
-        public Node(int key, int value, long accessTime) {
+        public Node(int key, int value) {
             this.key = key;
             this.value = value;
             this.hitCount = 1;
-            this.accessTime = accessTime;
+            this.accessTime = LFUCache.this.accessTime++;
             this.index = -1;
         }
 
@@ -136,7 +136,7 @@ public class LFUCache {
     /**
      * 最小堆数据结构，根节点的下标从0开始。
      */
-    static class Heap {
+    class Heap {
         Node[] nodes;
 
         int size;
@@ -261,10 +261,20 @@ public class LFUCache {
         }
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        LFUCache cache = new LFUCache(0);
-        cache.put(0, 0);
-        System.out.println(cache.get(0));
+    // [null,null,null,1,null,-1,3,null,1,-1,4] -- my
+    // [null,null,null,1,null,-1,3,null,-1,3,4] -- official
+    public static void main(String[] args) {
+        LFUCache cache = new LFUCache(2);
+        cache.put(1, 1);
+        cache.put(2, 2);
+        System.out.println(cache.get(1));
+        cache.put(3, 3);
+        System.out.println(cache.get(2));
+        System.out.println(cache.get(3));
+        cache.put(4, 4);
+        System.out.println(cache.get(1));
+        System.out.println(cache.get(3));
+        System.out.println(cache.get(4));
     }
 
 }
