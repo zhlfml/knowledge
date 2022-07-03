@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.design.monotonicqueue;
+package me.thomas.knowledge.algorithm.leetcode.monotonicqueue;
 
 import java.util.Arrays;
 import java.util.Deque;

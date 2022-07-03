@@ -1,6 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.design.monotonicstack;
-
-import me.thomas.knowledge.algorithm.leetcode.design.monotonicqueue.Solution239;
+package me.thomas.knowledge.algorithm.leetcode.monotonicstack;
 
 import java.util.Arrays;
 import java.util.Stack;
