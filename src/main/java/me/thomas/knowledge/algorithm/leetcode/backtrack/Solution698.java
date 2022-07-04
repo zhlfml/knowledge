@@ -12,30 +12,40 @@ import java.util.Arrays;
 public class Solution698 {
 
     /**
-     * 从数组中任意取N个数凑成leftValue。
-     * 思路：nums已从小到达排序，我们从后向前取数组中的数组，看能否凑成整数leftValue。
-     * 不能从小到大凑整的原因是：前面N个小数组成leftValue后，后面剩余的数太大导致不能再凑成leftValue了。
+     * 从数组中任意取N个数凑成target装入桶k之中。
+     * 思路：nums已从小到达排序，我们从后向前取数组中的数组，看能否凑成整数target。
+     * 不能从小到大凑整的原因是：前面N个小数组成target后，后面剩余的数太大导致不能再凑成target了。
      * 从大到小凑数能尽可能大数和小数1比1搭配。
      *
-     * @param nums      数组
-     * @param start     从start查找前面的数 -- Arrays.sort(nums)逆序太麻烦，所以这里从后向前查找。
-     * @param leftValue 剩余的数
+     * @param k      桶的序号
+     * @param bucket 桶k内已装入的数
+     * @param nums   可装入的数的数组
+     * @param start  从start查找前面的数 -- Arrays.sort(nums)逆序太麻烦，所以这里从后向前查找。
+     * @param target 需要凑成的目标数
      * @return true 能组成 false不能组成
      */
-    boolean backtrack(int[] nums, int start, boolean[] selected, int leftValue) {
-        if (leftValue == 0) {
+    boolean backtrack(int k, int bucket, int[] nums, int start, boolean[] selected, int target) {
+        if (k == 0) {
             return true;
         }
+        // 当前桶装满了，装入下一个桶
+        if (bucket == target) {
+            return backtrack(k - 1, 0, nums, nums.length - 1, selected, target);
+        }
         for (int i = start; i >= 0; i--) {
-            // start位置的数没有选过并且小于leftValue时可以选择
-            if (selected[i] || nums[i] > leftValue) {
+            // start位置的数没有选过并且小于target余数时可以选择
+            if (selected[i] || nums[i] > target - bucket) {
                 continue;
             }
             selected[i] = true;
-            if (backtrack(nums, i - 1, selected, leftValue - nums[i])) {
+            if (backtrack(k, bucket + nums[i], nums, i - 1, selected, target)) {
                 return true;
             }
             selected[i] = false;
+            // 当测试到当前num[i]不可用时，快速剪枝之前与之相同的数
+            while (i > 0 && nums[i - 1] == nums[i]) {
+                i--;
+            }
         }
         return false;
     }
@@ -66,14 +76,8 @@ public class Solution698 {
         }
 
         boolean[] selected = new boolean[nums.length];
-        // 拼凑出k次
-        for (; k > 0; k--) {
-            // 剩余的数不能凑出avg则失败
-            if (!backtrack(nums, nums.length - 1, selected, avg)) {
-                return false;
-            }
-        }
-        return true;
+        // 在回溯中，必须所有的控制流程的变量都在backtrack()参数之中。
+        return backtrack(k, 0, nums, nums.length - 1, selected, avg);
     }
 
     public static void main(String[] args) {
