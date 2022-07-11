@@ -42,15 +42,14 @@ public class Solution106 {
      * @return 二叉树
      */
     private TreeNode buildTree(int[] inorder, int inStart, int inEnd, int[] postorder, int postStart, int postEnd, Map<Integer, Integer> inorderMap) {
+        if (inStart == inEnd) {
+            return null;
+        }
         int rootVal = postorder[postEnd - 1];
         int inorderIndex = inorderMap.get(rootVal);
         TreeNode root = new TreeNode(rootVal);
-        if (inorderIndex > inStart) {
-            root.left = buildTree(inorder, inStart, inorderIndex, postorder, postStart, postStart + inorderIndex - inStart, inorderMap);
-        }
-        if (inorderIndex < inEnd - 1) {
-            root.right = buildTree(inorder, inorderIndex + 1, inEnd, postorder, postStart + inorderIndex - inStart, postEnd - 1, inorderMap);
-        }
+        root.left = buildTree(inorder, inStart, inorderIndex, postorder, postStart, postStart + inorderIndex - inStart, inorderMap);
+        root.right = buildTree(inorder, inorderIndex + 1, inEnd, postorder, postStart + inorderIndex - inStart, postEnd - 1, inorderMap);
         return root;
     }
 
