@@ -33,18 +33,16 @@ public class Codec {
     }
 
     /**
-     * 递归前序遍历序列化
+     * 递归后序遍历序列化
      */
     private void serialize(TreeNode node, StringBuilder stringBuilder) {
         if (node == null) {
-            stringBuilder.append("#");
-            stringBuilder.append(",");
+            stringBuilder.append("#").append(",");
             return;
         }
-        stringBuilder.append(node.val);
-        stringBuilder.append(",");
         serialize(node.left, stringBuilder);
         serialize(node.right, stringBuilder);
+        stringBuilder.append(node.val).append(",");
     }
 
     /**
@@ -54,19 +52,19 @@ public class Codec {
         if (linkedList.isEmpty()) {
             return null;
         }
-        String nodeVal = linkedList.pollFirst();
+        String nodeVal = linkedList.pollLast();
         if ("#".equals(nodeVal)) {
             return null;
         }
         TreeNode root = new TreeNode(Integer.parseInt(nodeVal));
-        root.left = deserialize(linkedList);
         root.right = deserialize(linkedList);
+        root.left = deserialize(linkedList);
         return root;
     }
 
     public static void main(String[] args) {
         Codec codec = new Codec();
-        System.out.println(codec.serialize(codec.deserialize("1,2,#,4,#,#,3,#,#,")));
+        System.out.println(codec.serialize(codec.deserialize("#,#,#,4,2,#,#,3,1,")));
     }
 
 }
