@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.backtrack;
+package me.thomas.knowledge.algorithm.leetcode.bfs;
 
 import java.util.HashSet;
 import java.util.LinkedList;
