@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.math;
+package me.thomas.knowledge.algorithm.leetcode.math.random;
 
 import java.util.Random;
 
