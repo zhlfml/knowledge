@@ -1,7 +1,6 @@
 package me.thomas.knowledge.algorithm.leetcode.math.prime;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 
 /**
  * 204. 计数质数
@@ -12,27 +11,21 @@ import java.util.List;
  */
 public class Solution204 {
 
-    List<Integer> primes;
-
     public int countPrimes(int n) {
-        if (n < 2) {
-            return 0;
-        }
-        primes = new ArrayList<>();
+        boolean[] primes = new boolean[n];
+        Arrays.fill(primes, true);
+
+        int answer = 0;
         for (int i = 2; i < n; i++) {
-            if (isPrime(i)) {
-                primes.add(i);
+            if (!primes[i]) {
+                continue;
+            }
+            answer++;
+            for (long j = (long) i * i; j < n; j += i) {
+                primes[(int) j] = false;
             }
         }
-        return primes.size();
+        return answer;
     }
 
-    boolean isPrime(int number) {
-        for (int prime : primes) {
-            if (number % prime == 0) {
-                return false;
-            }
-        }
-        return true;
-    }
 }
