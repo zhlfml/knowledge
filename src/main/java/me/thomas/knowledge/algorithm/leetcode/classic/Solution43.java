@@ -23,20 +23,18 @@ public class Solution43 {
         }
         char[] firstNum = num1.toCharArray();
         char[] secondNum = num2.toCharArray();
-        int firstNumLength = firstNum.length;
-        int secondNumLength = secondNum.length;
         // 积的最长位数是两乘数位数之和
-        char[] answer = new char[firstNumLength + secondNumLength];
+        char[] answer = new char[firstNum.length + secondNum.length];
         Arrays.fill(answer, '0');
         // 模拟手算乘法
-        for (int i = firstNumLength - 1; i >= 0; i--) {
-            for (int j = secondNumLength - 1; j >= 0; j--) {
+        for (int i = firstNum.length - 1; i >= 0; i--) {
+            for (int j = secondNum.length - 1; j >= 0; j--) {
                 // 计算两对应位上数字的乘积
                 int product = (firstNum[i] - '0') * (secondNum[j] - '0');
                 // 分解出高位和低位对应的数字 -- 与while循环体中保持一致
                 int lowVal = product % 10, highVal = product / 10;
                 // 写入的个十百千位
-                int position = (answer.length - 1) - ((firstNumLength - 1 - i) + (secondNumLength - 1 - j));
+                int position = i + j + 1; /* (answer.length - 1) - ((firstNum.length - 1 - i) + (secondNum.length - 1 - j)): answer.length = firstNum.length + secondNum.length */
                 do {
                     // 和
                     int summer = (answer[position] - '0') + lowVal;
@@ -54,18 +52,13 @@ public class Solution43 {
                 } while (true);
             }
         }
-        // 寻找第一个非零的位置
-        int k = 0;
-        for (; k < answer.length; k++) {
-            if (answer[k] > '0') {
-                break;
-            }
-        }
-        return new String(answer, k, answer.length - k);
+        // 检查第一位是否为0
+        int start = answer[0] == '0' ? 1 : 0;
+        return new String(answer, start, answer.length - start);
     }
 
     public static void main(String[] args) {
         Solution43 solution = new Solution43();
-        System.out.println(solution.multiply("0", "999999999"));
+        System.out.println(solution.multiply("123", "456"));
     }
 }
