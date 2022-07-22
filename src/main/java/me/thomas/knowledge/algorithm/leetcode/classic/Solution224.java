@@ -18,18 +18,28 @@ public class Solution224 {
      * 输出：23
      */
     public int calculate(String s) {
+        return innerCalc(s, 0)[0];
+    }
+
+    int[] innerCalc(String expr, int start) {
         char sign = '+';
         int number = 0;
         Stack<Integer> stack = new Stack<>();
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            if (Character.isSpaceChar(c)) {
-                continue;
-            }
+        int i;
+        for (i = start; i < expr.length(); i++) {
+            char c = expr.charAt(i);
             if (Character.isDigit(c)) {
-                number += number * 10 + (c - '0');
+                number = number * 10 + (c - '0');
             }
-            if (!Character.isDigit(c) || i == s.length() - 1) {
+            if (c == '(') {
+                int[] subExpr = innerCalc(expr, i + 1);
+                number = subExpr[0];
+                i = subExpr[1] + 1; /* go to the next index */
+                if (i < expr.length()) { /* read the next character if possible -- the right parentheses maybe at the end of expression. */
+                    c = expr.charAt(i);
+                }
+            }
+            if ((!Character.isDigit(c) && !Character.isSpaceChar(c)) || i >= expr.length() - 1) {
                 switch (sign) {
                     case '+':
                         stack.push(number);
@@ -51,17 +61,22 @@ public class Solution224 {
                 sign = c;
                 number = 0;
             }
+            if (c == ')') {
+                break;
+            }
         }
         int answer = 0;
         while (!stack.isEmpty()) {
             answer += stack.pop();
         }
-        return answer;
+        return new int[] { answer, i };
     }
 
     public static void main(String[] args) {
         Solution224 solution = new Solution224();
-        System.out.println(solution.calculate("1 + 2/2 + 3+4+5*2/3"));
+        System.out.println(solution.calculate("3 * (4 - 5 / 2) - 6"));
+        System.out.println(solution.calculate("(1+(4+5+2)-3)+(6+8)"));
+        System.out.println(solution.calculate("((3 + 5) * 6 + (12 - 7) * 3) / 7"));
     }
 
 }
