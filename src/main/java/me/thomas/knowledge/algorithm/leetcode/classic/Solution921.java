@@ -1,7 +1,5 @@
 package me.thomas.knowledge.algorithm.leetcode.classic;
 
-import java.util.Stack;
-
 /**
  * 921. 使括号有效的最少添加
  * 只有满足下面几点之一，括号字符串才是有效的：
@@ -28,20 +26,20 @@ public class Solution921 {
         if (s == null || s.length() == 0) {
             return 0;
         }
-        Stack<Character> left = new Stack<>(); // 放入不能匹配右括号的左括号
-        Stack<Character> right = new Stack<>(); // 放入不能匹配左括号的右括号
+        int insert = 0; /* 已经插入的括号 */
+        int need = 0; /* 需要匹配的右括号 */
         char[] chars = s.toCharArray();
         for (char c : chars) {
             if (c == '(') {
-                left.push(c);
+                need++;
             } else if (c == ')') {
-                if (left.isEmpty()) {
-                    right.push(c);
-                } else {
-                    left.pop();
+                need--;
+                if (need < 0) {
+                    insert++;
+                    need = 0;
                 }
             }
         }
-        return left.size() + right.size();
+        return insert + need;
     }
 }
