@@ -30,7 +30,8 @@ public class MedianFinder {
     }
 
     /**
-     * 思路：维护一个最小堆一个最大堆，确保最小堆和最大堆的数量差小于等于1（最大堆多1个元素）且最大堆的根节点小于等于最小堆的根节点。
+     * 思路：维护一个最小堆一个最大堆，确保最小堆和最大堆的数量差小于等于1（最大堆多1个元素）且最大堆（存放前半部分小数字）的根节点小于等于最小堆（存放后半部分大数字）的根节点。
+     * 以放入100以内的数为例：最大堆的根节点是49，最小堆的根节点是50。
      * 逻辑：先根据num与最大堆的大小比较结果放入合适的堆，再保持堆的平衡。
      */
     public void addNum(int num) {
@@ -65,14 +66,14 @@ public class MedianFinder {
 
     public static void main(String[] args) {
         MedianFinder medianFinder = new MedianFinder();
-        medianFinder.addNum(1);
-        medianFinder.addNum(2);
+        medianFinder.addNum(5);
+        medianFinder.addNum(4);
         System.out.println(medianFinder.findMedian());
         medianFinder.addNum(3);
         System.out.println(medianFinder.findMedian());
-        medianFinder.addNum(4);
+        medianFinder.addNum(2);
         System.out.println(medianFinder.findMedian());
-        medianFinder.addNum(5);
+        medianFinder.addNum(1);
         System.out.println(medianFinder.findMedian());
     }
 }
