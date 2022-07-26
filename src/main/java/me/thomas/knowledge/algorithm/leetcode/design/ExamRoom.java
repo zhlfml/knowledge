@@ -28,71 +28,60 @@ public class ExamRoom {
         this.treeSet = new TreeSet<>(Comparator.comparingInt(Segment::distanceFromCenter).reversed().thenComparingInt(Segment::getStart));
         this.startMap = new HashMap<>();
         this.endMap = new HashMap<>();
-        // 初始化最长的线段
-        addSegment(new Segment(0, n - 1));
+        // 初始化最长的线段：由于start、end都不包含，所以需要加入虚拟端点-1，n。
+        addSegment(new Segment(-1, n));
     }
 
     public int seat() {
-        Segment segment = removeFirstSegment();
+        Segment segment = treeSet.first();
         if (segment == null) {
             return -1;
         }
-        if (segment.getStart() == 0) {
-            addSegment(new Segment(segment.getStart() + 1, segment.getEnd()));
-            return 0;
+        int seat;
+        if (segment.getStart() == -1) {
+            seat = 0;
+        } else if (segment.getEnd() == n) {
+            seat = n - 1;
+        } else {
+            seat = segment.getMiddle();
         }
-        if (segment.getEnd() == n - 1) {
-            addSegment(new Segment(segment.getStart(), segment.getEnd() - 1));
-            return n - 1;
-        }
-        int mid = segment.getMiddle();
-        addSegment(new Segment(segment.getStart(), mid - 1));
-        addSegment(new Segment(mid + 1, segment.getEnd()));
-        return mid;
+        removeSegment(segment);
+        addSegment(new Segment(segment.getStart(), seat));
+        addSegment(new Segment(seat, segment.getEnd()));
+        return seat;
     }
 
     public void leave(int p) {
-        Segment rightSegment = startMap.get(p + 1);
+        Segment rightSegment = startMap.get(p);
+        Segment leftSegment = endMap.get(p);
         removeSegment(rightSegment);
-        Segment leftSegment = endMap.get(p - 1);
         removeSegment(leftSegment);
-        addSegment(new Segment(leftSegment == null ? p : leftSegment.getStart(), rightSegment == null ? p : rightSegment.getEnd()));
+        addSegment(new Segment(leftSegment.getStart(), rightSegment.getEnd()));
     }
 
     void addSegment(Segment segment) {
-        if (segment.getStart() > segment.getEnd()) {
-            return;
-        }
         treeSet.add(segment);
         startMap.put(segment.getStart(), segment);
         endMap.put(segment.getEnd(), segment);
     }
 
     void removeSegment(Segment segment) {
-        if (segment == null) {
-            return;
-        }
         treeSet.remove(segment);
         startMap.remove(segment.getStart());
         endMap.remove(segment.getEnd());
     }
 
-    Segment removeFirstSegment() {
-        Segment segment = treeSet.first();
-        removeSegment(segment);
-        return segment;
-    }
-
     /**
-     * 可入座的连续的位置组成的段
+     * 可入座的连续的位置组成的段，start、end都不包含的目的是处理线段拆分合并比较方便。
+     * 如果start、end都包含会导致处理细节较多。如入座时左侧需要-1，右侧需要+1。合并时找相邻的线路也需要-1，+1才行。
      */
     class Segment {
         /**
-         * 可入座的起始位置，包含
+         * 可入座的起始位置，不包含
          */
         int start;
         /**
-         * 可入座的终点位置，包含
+         * 可入座的终点位置，不包含
          */
         int end;
 
@@ -112,8 +101,8 @@ public class ExamRoom {
          * 中心点到左侧的距离
          */
         public int distanceFromCenter() {
-            if (start == 0 || end == n - 1) {
-                return end - start;
+            if (start == -1 || end == n) {
+                return end - start - 1;
             }
             return (end - start) / 2;
         }
