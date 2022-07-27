@@ -1,6 +1,9 @@
 package me.thomas.knowledge.algorithm.leetcode.design;
 
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 /**
  * 剑指 Offer 59 - II. 队列的最大值
@@ -16,6 +19,12 @@ public class MaxQueue {
     private final Queue<Integer> queue;
     private final Deque<Integer> deque;
 
+    /**
+     * 思路：单调队列
+     * 依赖普通队列和双端队列两个属性，
+     * 普通队列的重用是提供数据先进先出的能力。
+     * 双端队列的作用是维护最值。
+     */
     public MaxQueue() {
         queue = new ArrayDeque<>();
         deque = new LinkedList<>();
