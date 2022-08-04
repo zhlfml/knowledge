@@ -45,14 +45,10 @@ public class Solution354 {
         int heapSize = 1;
         heaps[0] = nums[0];
         for (int i = 1; i < nums.length; i++) {
-            // 如果超出了最大牌堆（最右侧牌堆）的数值，则创建新队。
-            if (nums[i] > heaps[heapSize - 1]) {
-                heaps[heapSize++] = nums[i];
-            } else {
-                // 二分查找小于牌堆顶数字的最右侧堆。
-                int index = leftBound(heaps, heapSize, nums[i]);
-                heaps[index] = nums[i];
-            }
+            // 二分查找小于牌堆顶数字的最右侧堆。
+            int index = leftBound(heaps, heapSize, nums[i]);
+            heaps[index] = nums[i]; /* 将牌覆盖到合适的牌堆上 */
+            heapSize = Math.max(heapSize, index + 1);
         }
         return heapSize;
     }
