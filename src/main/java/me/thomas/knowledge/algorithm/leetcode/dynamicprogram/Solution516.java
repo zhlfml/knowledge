@@ -43,14 +43,14 @@ public class Solution516 {
         for (int i = len - 1; i >= 0; i--) {
             int pre = 0;
             for (int j = i + 1; j < len; j++) {
-                int tmp = dp[j];
+                int tmp = dp[j]; /* Step 1. 没覆盖前dp[j]对应存储dp[i+1][j] */
                 if (str[i] != str[j]) {
                     // dp[j]在赋新值之前存储的值对应dp[i+1][j]
                     dp[j] = Math.max(dp[j], dp[j - 1]);
                 } else {
-                    dp[j] = 2 + pre;
+                    dp[j] = 2 + pre; /* Step 3. 因此prev对应存储dp[i+1][j-1] */
                 }
-                pre = tmp;
+                pre = tmp; /* Step 2. 进入下一次循环（j++）后，prev对应存储dp[i+1][j-1] */
             }
         }
         return dp[len - 1];
@@ -89,6 +89,6 @@ public class Solution516 {
 
     public static void main(String[] args) {
         Solution516 solution = new Solution516();
-        System.out.println(solution.longestPalindromeSubseq("bbab"));
+        System.out.println(solution.longestPalindromeSubseq("abbabbxa"));
     }
 }
