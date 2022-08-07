@@ -15,6 +15,44 @@ public class Solution931 {
         if (matrix == null || matrix.length == 0) {
             return 0;
         }
+        return minFallingPathSum_dp1(matrix);
+    }
+
+    /**
+     * 定义dp为一维数组
+     */
+    int minFallingPathSum_dp1(int[][] matrix) {
+        int row = matrix.length, col = matrix[0].length;
+        int[] dp = null, prev = null; /* dp含义：从第一行任意列下降到matrix[i][j]的最小和 */
+        for (int i = 0; i < row; i++) {
+            dp = new int[col]; /* create dp matrix each row, because at last prev = dp */
+            for (int j = 0; j < col; j++) {
+                // base case
+                if (i == 0) {
+                    dp[j] = matrix[i][j];
+                } else {
+                    if (j == 0) {
+                        dp[j] = Math.min(prev[j], prev[j + 1]) + matrix[i][j];
+                    } else if (j < col - 1) {
+                        dp[j] = min(prev[j - 1], prev[j], prev[j + 1]) + matrix[i][j];
+                    } else {
+                        dp[j] = Math.min(prev[j - 1], prev[j]) + matrix[i][j];
+                    }
+                }
+            }
+            prev = dp;
+        }
+        int answer = Integer.MAX_VALUE;
+        for (int j = 0; j < col; j++) {
+            answer = Math.min(answer, dp[j]);
+        }
+        return answer;
+    }
+
+    /**
+     * 定义dp为二维数组
+     */
+    int minFallingPathSum_dp2(int[][] matrix) {
         int row = matrix.length, col = matrix[0].length;
         int[][] dp = new int[row][col]; /* dp含义：从第一行任意列下降到matrix[i][j]的最小和 */
         for (int i = 0; i < row; i++) {
