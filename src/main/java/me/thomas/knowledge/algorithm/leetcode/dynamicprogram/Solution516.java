@@ -24,7 +24,36 @@ public class Solution516 {
         if (len < 2) {
             return len;
         }
-        return longestPalindromeSubseq_dp2(s);
+        return longestPalindromeSubseq_dp1(s);
+    }
+
+    /**
+     * 将dp定义成一维数组
+     */
+    int longestPalindromeSubseq_dp1(String s) {
+        char[] str = s.toCharArray();
+        int len = s.length();
+        int[] dp = new int[len]; /* dp含义：字符串s从i（i是当前遍历的行数）到j的最大回文子序列的长度为dp[j] */
+        for (int i = 0; i < len; i++) {
+            dp[i] = 1;
+        }
+        /*
+         * 从下向上从左到右遍历
+         */
+        for (int i = len - 1; i >= 0; i--) {
+            int pre = 0;
+            for (int j = i + 1; j < len; j++) {
+                int tmp = dp[j];
+                if (str[i] != str[j]) {
+                    // dp[j]在赋新值之前存储的值对应dp[i+1][j]
+                    dp[j] = Math.max(dp[j], dp[j - 1]);
+                } else {
+                    dp[j] = 2 + pre;
+                }
+                pre = tmp;
+            }
+        }
+        return dp[len - 1];
     }
 
     /**
@@ -42,7 +71,7 @@ public class Solution516 {
          * 从下向上从左到右遍历
          * 计算最长回文子序列时分为两种情况
          *  1. i和j所在的字符不等，那么dp[i][j]的最大回文子序列就是Math.max(dp[i + 1][j], dp[i][j - 1])
-         *  2. i和j所在的字符相等, 又细分为两种情况
+         *  2. i和j所在的字符相等, 又细分为两种情况 -- 其实这两种可以合为一种，因为i和j相邻时，dp[i + 1][j - 1] == 0，所以可以合并。
          *  2.1 i和j相邻，那么dp[i][j]==2
          *  2.2 i和j不相邻，那么dp[i][j]==2+dp[i + 1][j - 1]
          */
@@ -51,11 +80,7 @@ public class Solution516 {
                 if (str[i] != str[j]) {
                     dp[i][j] = Math.max(dp[i + 1][j], dp[i][j - 1]);
                 } else {
-                    if (j - i == 1) {
-                        dp[i][j] = 2;
-                    } else {
-                        dp[i][j] = 2 + dp[i + 1][j - 1];
-                    }
+                    dp[i][j] = 2 + dp[i + 1][j - 1];
                 }
             }
         }
@@ -64,6 +89,6 @@ public class Solution516 {
 
     public static void main(String[] args) {
         Solution516 solution = new Solution516();
-        System.out.println(solution.longestPalindromeSubseq("ab"));
+        System.out.println(solution.longestPalindromeSubseq("bbab"));
     }
 }
