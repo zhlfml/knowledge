@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
+package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.range;
 
 /**
  * 5. 最长回文子串

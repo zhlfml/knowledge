@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
+package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.range;
 
 /**
  * 1312. 让字符串成为回文串的最少插入次数

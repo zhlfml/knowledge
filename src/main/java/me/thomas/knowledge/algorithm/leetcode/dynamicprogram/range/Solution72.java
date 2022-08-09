@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
+package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.range;
 
 /**
  * 72. 编辑距离
@@ -16,6 +16,7 @@ package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
 public class Solution72 {
 
     /**
+     * 难点：base case是什么？
      * 输入：word1 = "horse", word2 = "ros"
      * 输出：3
      * 解释：
@@ -51,6 +52,8 @@ public class Solution72 {
         }
         return dp[m][n];
     }
+
+    // todo 优化：使用一维数组定义dp
 
     int min(int... a) {
         int answer = a[0];
