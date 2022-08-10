@@ -24,12 +24,14 @@ public class Solution416 {
         }
 
         boolean[][] dp = new boolean[nums.length + 1][weightSum / 2 + 1]; /* 含义：前i个物品（取任意个）能否放满重量为j的背包 */
+        // 最本质的base case
+        for (int i = 0; i < dp.length; i++) {
+            dp[i][0] = true;
+        }
         for (int i = 1; i < dp.length; i++) {
             for (int j = 1; j < dp[i - 1].length; j++) {
                 if (nums[i - 1] > j) {
                     dp[i][j] = dp[i - 1][j];
-                } else if (nums[i - 1] == j) {
-                    dp[i][j] = true;
                 } else {
                     dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
                 }
