@@ -31,7 +31,7 @@ public class Solution416 {
                 } else if (nums[i - 1] == j) {
                     dp[i][j] = true;
                 } else {
-                    dp[i][j] = dp[i - 1][j] || dp[i][j - nums[i - 1]];
+                    dp[i][j] = dp[i - 1][j] || dp[i - 1][j - nums[i - 1]];
                 }
             }
         }
