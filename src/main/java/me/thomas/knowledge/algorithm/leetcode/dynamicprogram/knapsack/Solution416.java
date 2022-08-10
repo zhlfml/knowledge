@@ -23,23 +23,23 @@ public class Solution416 {
             return false;
         }
 
-        boolean[][] dp = new boolean[nums.length][weightSum / 2]; /* 含义：前i个物品（取任意个）能否放满重量为j的背包 */
+        boolean[][] dp = new boolean[nums.length + 1][weightSum / 2 + 1]; /* 含义：前i个物品（取任意个）能否放满重量为j的背包 */
         for (int i = 1; i < dp.length; i++) {
             for (int j = 1; j < dp[i - 1].length; j++) {
-                if (nums[i] > j) {
+                if (nums[i - 1] > j) {
                     dp[i][j] = dp[i - 1][j];
-                } else if (nums[i] == j) {
+                } else if (nums[i - 1] == j) {
                     dp[i][j] = true;
                 } else {
-                    dp[i][j] = dp[i - 1][j] || dp[i][j - nums[i]];
+                    dp[i][j] = dp[i - 1][j] || dp[i][j - nums[i - 1]];
                 }
             }
         }
-        return dp[nums.length - 1][weightSum / 2 - 1];
+        return dp[nums.length][weightSum / 2];
     }
 
     public static void main(String[] args) {
         Solution416 solution = new Solution416();
-        System.out.println(solution.canPartition(new int[] { 1, 5, 11, 5 }));
+        System.out.println(solution.canPartition(new int[] { 1, 5, 2 }));
     }
 }
