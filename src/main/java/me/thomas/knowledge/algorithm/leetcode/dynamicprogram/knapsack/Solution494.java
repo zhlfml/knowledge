@@ -40,23 +40,20 @@ public class Solution494 {
         }
         int len = nums.length;
         int half = total / 2;
-        int[][] dp = new int[len + 1][half + 1]; /* 含义：nums前i个数凑成数字j的方案数为dp[i][j] */
-        for (int i = 0; i <= len; i++) {
-            dp[i][0] = 1; /* 前i个数字凑成0的方案数为1 */
-        }
+        int[] dp = new int[half + 1]; /* 含义：nums前i个数凑成数字j的方案数为dp[i][j] */
+            dp[0] = 1; /* 前i个数字凑成0的方案数为1 */
         for (int i = 1; i <= len; i++) {
-            for (int j = 0; j <= half; j++) { /* 易错点：j从0开始 */
-                dp[i][j] = dp[i - 1][j];
+            for (int j = half; j >= 0; j--) { /* 由于dp[j]依赖dp[j-nums[i-1]], 如果j从小到大遍历，那么dp[j-nums[i-1]]当前行计算时会被覆盖导致读取的是当前行的值，所以需要改成j从大到小遍历。 */
                 if (j >= nums[i - 1]) {
-                    dp[i][j] += dp[i - 1][j - nums[i - 1]];
+                    dp[j] += dp[j - nums[i - 1]];
                 }
             }
         }
-        return dp[nums.length][half];
+        return dp[half];
     }
 
     public static void main(String[] args) {
         Solution494 solution = new Solution494();
-        System.out.println(solution.findTargetSumWays(new int[] { 100 }, -200));
+        System.out.println(solution.findTargetSumWays(new int[] { 1, 1, 1, 1, 1 }, 3));
     }
 }
