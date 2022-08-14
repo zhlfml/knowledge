@@ -25,20 +25,16 @@ public class Solution518 {
      * 5=1+1+1+1+1
      */
     public int change(int amount, int[] coins) {
-        int[][] dp = new int[coins.length + 1][amount + 1]; /* 含义：使用前i个硬币可以组成金额j的可能性有dp[i][j]种 */
-        for (int i = 1; i < dp.length; i++) {
-            dp[i][0] = 1; /* 组成金额为0只有一种方式 */
-        }
-        for (int i = 1; i < dp.length; i++) {
-            for (int j = 1; j < dp[i].length; j++) {
+        int[] dp = new int[amount + 1]; /* 含义：使用前i个硬币可以组成金额j的可能性有dp[i][j]种 */
+        dp[0] = 1; /* 组成金额为0只有一种方式 */
+        for (int i = 1; i <= coins.length; i++) {
+            for (int j = 1; j <= amount; j++) {
                 if (j >= coins[i - 1]) {
-                    dp[i][j] = dp[i - 1][j] + dp[i][j - coins[i - 1]];
-                } else {
-                    dp[i][j] = dp[i - 1][j];
+                    dp[j] += dp[j - coins[i - 1]];
                 }
             }
         }
-        return dp[coins.length][amount];
+        return dp[amount];
     }
 
     public static void main(String[] args) {
