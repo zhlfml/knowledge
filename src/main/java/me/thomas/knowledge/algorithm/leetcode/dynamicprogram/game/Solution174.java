@@ -33,31 +33,31 @@ public class Solution174 {
         dp[1][0][0] = dungeon[0][0]; /* 走最小健康点数路径的剩余健康点数，存的值正负数都有可能 */
         // base case : first row
         for (int j = 1; j < n; j++) {
-            dp[0][0][j] = Math.min(dp[0][0][j - 1], dp[0][0][j - 1] + dungeon[0][j]);
             dp[1][0][j] = dp[1][0][j - 1] + dungeon[0][j];
+            dp[0][0][j] = Math.min(dp[0][0][j - 1], dp[1][0][j]);
         }
         // base case : first column
         for (int i = 1; i < m; i++) {
-            dp[0][i][0] = Math.min(dp[0][i - 1][0], dp[0][i - 1][0] + dungeon[i][0]);
             dp[1][i][0] = dp[1][i - 1][0] + dungeon[i][0];
+            dp[0][i][0] = Math.min(dp[0][i - 1][0], dp[1][i][0]);
         }
         for (int i = 1; i < m; i++) {
             for (int j = 1; j < n; j++) {
                 // 哪条路需要的健康点数少，就走哪条路
-                if (dp[0][i - 1][j] >= dp[0][i][j - 1]) {
+                if (dp[0][i - 1][j] > dp[0][i][j - 1] || (dp[0][i - 1][j] == dp[0][i][j - 1] && dp[1][i - 1][j] > dp[1][i][j - 1])) {
                     dp[1][i][j] = dp[1][i - 1][j] + dungeon[i][j];
                     dp[0][i][j] = Math.min(dp[0][i - 1][j], dp[1][i][j]); /* 关键是和当前剩余的健康点数比较 */
                 } else {
-                    dp[1][i][j] = dp[0][i][j - 1] + dungeon[i][j];
+                    dp[1][i][j] = dp[1][i][j - 1] + dungeon[i][j];
                     dp[0][i][j] = Math.min(dp[0][i][j - 1], dp[1][i][j]);
                 }
             }
         }
-        return Math.max(1 - dp[0][m - 1][n - 1], 0);
+        return Math.max(1 - dp[0][m - 1][n - 1], 1);
     }
 
     public static void main(String[] args) {
         Solution174 solution = new Solution174();
-        System.out.println(solution.calculateMinimumHP(new int[][] { { 0, 0, 0 }, { 1, 1, -1 } }));
+        System.out.println(solution.calculateMinimumHP(new int[][] { { 1, -3, 3 }, { 0, -2, 0 }, { -3, -3, -3 } }));
     }
 }
