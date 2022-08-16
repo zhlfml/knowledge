@@ -16,7 +16,7 @@ package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.game;
 public class Solution174 {
 
     /**
-     * 思路：骑士行走过程中健康点不能小于0，所以走到(i,j)时需要记录两个状态 -- 1. 保持不死的最小健康点数 2. 走最小健康点数路径的剩余健康点数。
+     * 思路：逆向思维，公主找骑士。
      *
      * @param dungeon
      * @return
@@ -27,37 +27,27 @@ public class Solution174 {
         }
         int m = dungeon.length, n = dungeon[0].length;
         // 根据思路，需要两个二维数组，所以定义成首位为2的三位数组。
-        int[][][] dp = new int[2][m][n]; /* 含义：从(0,0)走到(i,j)需要的健康点数为dp[i][j] */
+        int[][] dp = new int[m][n]; /* 含义：从(i,j)走到(m-1,n-1)需要的健康点数为dp[i][j] */
         // base case: start point
-        dp[0][0][0] = Math.min(dungeon[0][0], 0); /* 需要最小健康点数, 存的值可能是负数或0 */
-        dp[1][0][0] = dungeon[0][0]; /* 走最小健康点数路径的剩余健康点数，存的值正负数都有可能 */
-        // base case : first row
-        for (int j = 1; j < n; j++) {
-            dp[1][0][j] = dp[1][0][j - 1] + dungeon[0][j];
-            dp[0][0][j] = Math.min(dp[0][0][j - 1], dp[1][0][j]);
+        dp[m - 1][n - 1] = Math.max(1 - dungeon[m - 1][n - 1], 1);
+        // base case : last row
+        for (int j = n - 2; j >= 0; j--) {
+            dp[m - 1][j] = Math.max(dp[m - 1][j + 1] - dungeon[m - 1][j], 1);
         }
-        // base case : first column
-        for (int i = 1; i < m; i++) {
-            dp[1][i][0] = dp[1][i - 1][0] + dungeon[i][0];
-            dp[0][i][0] = Math.min(dp[0][i - 1][0], dp[1][i][0]);
+        // base case : last column
+        for (int i = m - 2; i >= 0; i--) {
+            dp[i][n - 1] = Math.max(dp[i + 1][n - 1] - dungeon[i][n - 1], 1);
         }
-        for (int i = 1; i < m; i++) {
-            for (int j = 1; j < n; j++) {
-                // 哪条路需要的健康点数少，就走哪条路
-                if (dp[0][i - 1][j] > dp[0][i][j - 1] || (dp[0][i - 1][j] == dp[0][i][j - 1] && dp[1][i - 1][j] > dp[1][i][j - 1])) {
-                    dp[1][i][j] = dp[1][i - 1][j] + dungeon[i][j];
-                    dp[0][i][j] = Math.min(dp[0][i - 1][j], dp[1][i][j]); /* 关键是和当前剩余的健康点数比较 */
-                } else {
-                    dp[1][i][j] = dp[1][i][j - 1] + dungeon[i][j];
-                    dp[0][i][j] = Math.min(dp[0][i][j - 1], dp[1][i][j]);
-                }
+        for (int i = m - 2; i >= 0; i--) {
+            for (int j = n - 2; j >= 0; j--) {
+                dp[i][j] = Math.max(Math.min(dp[i + 1][j], dp[i][j + 1]) - dungeon[i][j], 1);
             }
         }
-        return Math.max(1 - dp[0][m - 1][n - 1], 1);
+        return dp[0][0];
     }
 
     public static void main(String[] args) {
         Solution174 solution = new Solution174();
-        System.out.println(solution.calculateMinimumHP(new int[][] { { 1, -3, 3 }, { 0, -2, 0 }, { -3, -3, -3 } }));
+        System.out.println(solution.calculateMinimumHP(new int[][] { { -3, 5 } }));
     }
 }
