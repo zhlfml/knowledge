@@ -56,14 +56,14 @@ public class Solution514 {
         for (int i = 0; i < m; i++) {
             Arrays.fill(dp[i], 0x3f3f3f3f);
         }
-        for (int i = 0; i < m; i++) {
+        // base case: 单独处理key的第一个字符，可以免去if操作
+        for (int j : pos[key.charAt(0) - 'a']) {
+            dp[0][j] = Math.min(j, n - j) + 1;
+        }
+        for (int i = 1; i < m; i++) {
             for (int j : pos[key.charAt(i) - 'a']) {
-                if (i > 0) {
-                    for (int jj : pos[key.charAt(i - 1) - 'a']) {
-                        dp[i][j] = Math.min(dp[i][j], dp[i - 1][jj] + Math.min(Math.abs(j - jj), n - Math.abs(j - jj)) + 1);
-                    }
-                } else {
-                    dp[i][j] = Math.min(j, n - j) + 1;
+                for (int k : pos[key.charAt(i - 1) - 'a']) { // key的第i个字符由前一个字符推导而来。
+                    dp[i][j] = Math.min(dp[i][j], dp[i - 1][k] + Math.min(Math.abs(j - k), n - Math.abs(j - k)) + 1);
                 }
             }
         }
