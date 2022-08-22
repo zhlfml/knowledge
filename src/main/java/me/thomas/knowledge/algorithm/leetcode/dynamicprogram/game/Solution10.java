@@ -21,29 +21,40 @@ public class Solution10 {
             throw new IllegalArgumentException("p is empty");
         }
         int m = p.length(), n = s.length();
-        boolean[][] dp = new boolean[m][n]; /* 含义：p[0..i]能否被匹配s[0..j]的结果为dp[i][j] */
-        dp[0][0] = isMatch(p.charAt(0), s.charAt(0));
-        // 不能因为dp[0][0]==false就提前结束，因为可能存在正则第二个字符是*的情况
-        for (int i = 1; i < m; i++) {
-            boolean isMultiple = p.charAt(i) == '*';
-            for (int j = 1; j < n; j++) {
-                dp[i][j] = dp[i - 1][j - 1] && isMatch(p.charAt(i), s.charAt(j));
-                if (!dp[i][j] && isMultiple) { // 如果不能匹配，那么检查p[i]是否为`*`
-                    dp[i][j] = (i >= 2 && dp[i - 2][j]) || isMatch(p.charAt(i - 1), s.charAt(j));
+        boolean[][] dp = new boolean[m + 1][n + 1]; /* 含义：p的前i个字符能否被匹配s的前j个字符的结果为dp[i][j] */
+        dp[0][0] = true;  /* base case: 前0个字符都是空字符串，可以匹配上 */
+        for (int i = 1; i <= m; i++) {
+            for (int j = 0; j <= n; j++) {
+                if (matches(p, s, i, j)) {
+                    dp[i][j] = dp[i - 1][j - 1];
+                } else if (p.charAt(i - 1) == '*') {
+                    dp[i][j] = dp[i - 2][j]; /* 匹配0次 */
+                    if (matches(p, s, i - 1, j)) {
+                        dp[i][j] = dp[i][j] || dp[i][j - 1];
+                    }
                 }
             }
         }
-        return dp[m - 1][n - 1];
+        return dp[m][n];
     }
 
-    boolean isMatch(char regexChar, char normalChar) {
-        return regexChar == '.' || normalChar == regexChar;
+    boolean matches(String p, String s, int i, int j) {
+        if (j == 0) {
+            return false;
+        }
+        if (p.charAt(i - 1) == '.') {
+            return true;
+        }
+        return p.charAt(i - 1) == s.charAt(j - 1);
     }
 
     public static void main(String[] args) {
         Solution10 solution = new Solution10();
+        System.out.println(solution.isMatch("a", "a*"));
+        System.out.println(solution.isMatch("aaaaab", "a*ab"));
         System.out.println(solution.isMatch("abce", "abcd*e"));
         System.out.println(solution.isMatch("abcdddde", "abcd*e"));
         System.out.println(solution.isMatch("aab", "c*a*b"));
+        System.out.println(solution.isMatch("mississippi", "mis*is*p*."));
     }
 }
