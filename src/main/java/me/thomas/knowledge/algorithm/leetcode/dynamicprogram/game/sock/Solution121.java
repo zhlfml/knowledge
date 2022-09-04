@@ -21,27 +21,24 @@ public class Solution121 {
         if (prices == null || prices.length <= 1) {
             return 0;
         }
-        return maxProfit_dp(prices);
+        return maxProfit_greedy(prices);
     }
 
     /**
      * 思路：贪心法
-     * 当发现更低的买入价后，抛出上一个周期的股票并计算收入。
-     * 遍历完所有日期的股价后，算出收益最高的价值返回。
+     * 一个变量始终保存当前的最大收益，一个变量始终保存当前的最小买入价格.
      */
     int maxProfit_greedy(int[] prices) {
         int maxProfitSoFar = 0;
-        int lowestPrice = prices[0], highestPrice = prices[0];
+        int lowestPrice = prices[0];
         for (int i = 1; i < prices.length; i++) {
             if (lowestPrice > prices[i]) { /* 遇到了更低价，准备买入 */
-                maxProfitSoFar = Math.max(maxProfitSoFar, highestPrice - lowestPrice);
                 lowestPrice = prices[i];
-                highestPrice = prices[i];
-            } else if (highestPrice < prices[i]) {
-                highestPrice = prices[i];
+            } else {
+                maxProfitSoFar = Math.max(maxProfitSoFar, prices[i] - lowestPrice);
             }
         }
-        return Math.max(maxProfitSoFar, highestPrice - lowestPrice);
+        return maxProfitSoFar;
     }
 
     /**
