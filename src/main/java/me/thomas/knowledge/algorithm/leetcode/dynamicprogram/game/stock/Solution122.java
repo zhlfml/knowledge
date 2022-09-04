@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.game.sock;
+package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.game.stock;
 
 /**
  * 122. 买卖股票的最佳时机 II
@@ -29,7 +29,7 @@ public class Solution122 {
         if (prices == null || prices.length <= 1) {
             return 0;
         }
-        return maxProfit_greedy(prices);
+        return maxProfit_dp(prices);
     }
 
     /**
@@ -57,5 +57,10 @@ public class Solution122 {
             dp[i][1] = Math.max(dp[i - 1][1], dp[i - 1][0] - prices[i]);
         }
         return dp[prices.length - 1][0];
+    }
+
+    public static void main(String[] args) {
+        Solution122 solution = new Solution122();
+        System.out.println(solution.maxProfit(new int[] { 7, 1, 5, 3, 6, 4 }));
     }
 }

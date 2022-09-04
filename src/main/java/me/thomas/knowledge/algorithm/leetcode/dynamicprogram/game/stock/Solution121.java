@@ -1,4 +1,4 @@
-package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.game.sock;
+package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.game.stock;
 
 /**
  * 121. 买卖股票的最佳时机
