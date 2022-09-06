@@ -21,16 +21,14 @@ public class Solution123 {
      */
     public int maxProfit(int[] prices) {
         int[][][] dp = new int[prices.length][3][2]; /* 含义：第i天最多买入过j次股票当前手里是否持股的状态为k的最大收益为dp[i][j][k] */
-        dp[0][0][0] = 0;
-        dp[0][1][1] = -prices[0];
-
         /*
-            base case: 没有交易的前提下未持仓的收益为0，持仓的收益为负无穷大.
+            base case: 第一天没有交易的前提下未持仓的收益为0，持仓的收益为负买入价.
+            其实dp[x][0][0] = 0, dp[x][0][1] = -infinity，但是由于数组初始化的值为0，且动态规划状态转移方程不依赖dp[x][0][1]，所以没有必要显示对这两种情况赋初值。
          */
         for (int i = 0; i < prices.length; i++) {
             for (int j = 1; j < 3; j++) {
                 dp[i][j][0] = 0;
-                dp[i][j][1] = 0xcf3f3f3f;
+                dp[i][j][1] = -prices[0];
             }
         }
 
@@ -38,6 +36,8 @@ public class Solution123 {
             for (int j = 1; j < 3; j++) {
                 dp[i][j][0] = Math.max(dp[i - 1][j][0], dp[i - 1][j][1] + prices[i]);
                 dp[i][j][1] = Math.max(dp[i - 1][j][1], dp[i - 1][j - 1][0] - prices[i]);
+                System.out.printf("dp[%d][%d][%d]=%d\t", i, j, 0, dp[i][j][0]);
+                System.out.printf("dp[%d][%d][%d]=%d\n", i, j, 1, dp[i][j][1]);
             }
         }
 
