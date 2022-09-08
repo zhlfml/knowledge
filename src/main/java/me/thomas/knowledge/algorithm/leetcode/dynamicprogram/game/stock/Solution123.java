@@ -25,11 +25,9 @@ public class Solution123 {
             base case: 第一天没有交易的前提下未持仓的收益为0，持仓的收益为负买入价.
             其实dp[x][0][0] = 0, dp[x][0][1] = -infinity，但是由于数组初始化的值为0，且动态规划状态转移方程不依赖dp[x][0][1]，所以没有必要显示对这两种情况赋初值。
          */
-        for (int i = 0; i < prices.length; i++) {
-            for (int j = 1; j < 3; j++) {
-                dp[i][j][0] = 0;
-                dp[i][j][1] = -prices[0];
-            }
+        for (int j = 1; j < 3; j++) {
+            dp[0][j][0] = 0;
+            dp[0][j][1] = -prices[0];
         }
 
         for (int i = 1; i < prices.length; i++) {

@@ -19,11 +19,9 @@ public class Solution188 {
         }
         int n = prices.length;
         int[][][] dp = new int[n][k + 1][2]; /* 含义：第i天最多买入过j次股票当前手里是否持股的状态为k的最大收益为dp[i][j][k] */
-        for (int i = 0; i < prices.length; i++) {
-            for (int j = 1; j <= k; j++) {
-                dp[i][j][0] = 0;
-                dp[i][j][1] = -prices[i];
-            }
+        for (int j = 1; j <= k; j++) {
+            dp[0][j][0] = 0;
+            dp[0][j][1] = -prices[0];
         }
         for (int i = 1; i < n; i++) {
             for (int j = 1; j <= k; j++) {
