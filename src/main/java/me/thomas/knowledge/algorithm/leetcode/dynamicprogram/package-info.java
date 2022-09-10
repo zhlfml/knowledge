@@ -9,5 +9,8 @@
  * 2. 明确状态 -- 可变化的才是状态。
  * 3. 明确选择 -- 可以做哪些选择，如何选择？选最大值还是最小值。
  * 4. 定义dp数组/函数的含义。
+ * <p>
+ * 限制：
+ * 1. 要符合「最优子结构」，子问题间必须互相独立。
  */
 package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
