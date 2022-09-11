@@ -1,9 +1,6 @@
 package me.thomas.knowledge.algorithm.leetcode.graph;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.util.*;
 
 /**
  * 有 n 个城市通过一些航班连接。给你一个数组flights ，其中flights[i] = [fromi, toi, pricei] ，表示该航班都从城市 fromi 开始，以价格 pricei 抵达 toi。
@@ -37,25 +34,28 @@ public class Solution787 {
         }
 
         int answer = INF;
-        boolean[] visited = new boolean[n];
+        int[] costs = new int[n]; /* 关键：从起点到达城市i的最低费用为prices[i]，这里不能简单的通过是否访问过作为判断逻辑，因为中转次数多的费用未必更多 */
+        Arrays.fill(costs, INF); /* 默认到达每个城市的费用为无穷大 */
         Queue<Vertex> queue = new LinkedList<>();
-        visited[src] = true;
+        costs[src] = 0; // base case: 始发站城市费用为0
         queue.offer(new Vertex(src, 0, 0));
         while (!queue.isEmpty()) {
             Vertex vertex = queue.poll();
             // 是否到达了终点
             if (vertex.id == dst) {
                 answer = Math.min(answer, vertex.price);
+                continue;
             }
             if (vertex.times - 1 == k) { // 飞行的次数减去1就是中转的次数，如果中转次数已到达k次，则不可以继续飞行。
                 continue;
             }
             for (Edge edge : graph[vertex.id]) {
-                if (visited[edge.vertex]) {
+                int price = edge.price + vertex.price; // 到达下一站的费用
+                if (costs[edge.vertex] <= price) { // 如果之前某条路径同样到达相同的下一站城市且费用更低则无需做无用功，可以立即跳过。
                     continue;
                 }
-                visited[edge.vertex] = true;
-                queue.offer(new Vertex(edge.vertex, edge.price + vertex.price, vertex.times + 1));
+                costs[edge.vertex] = price;
+                queue.offer(new Vertex(edge.vertex, price, vertex.times + 1));
             }
         }
         return answer == INF ? -1 : answer;
@@ -85,11 +85,11 @@ public class Solution787 {
 
     public static void main(String[] args) {
         Solution787 solution = new Solution787();
-        int n = 4;
-        int[][] flights = new int[][] { { 0, 1, 100 }, { 1, 2, 100 }, { 2, 0, 100 }, { 1, 3, 600 }, { 2, 3, 200 } };
+        int n = 5;
+        int[][] flights = new int[][] { { 0, 1, 5 }, { 1, 2, 5 }, { 0, 3, 2 }, { 3, 1, 2 }, { 1, 4, 1 }, { 4, 2, 1 } };
         int src = 0;
-        int dst = 3;
-        int k = 1;
+        int dst = 2;
+        int k = 2;
         System.out.println(solution.findCheapestPrice(n, flights, src, dst, k));
     }
 }
