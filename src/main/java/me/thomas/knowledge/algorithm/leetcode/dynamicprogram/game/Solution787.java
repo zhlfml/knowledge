@@ -27,12 +27,14 @@ public class Solution787 {
         for (int[] flight : flights) {
             graph[flight[1]].add(new Edge(flight[0], flight[2]));
         }
+        k++; /* 关键：将中转站数量转化为边的数量 */
         // 自顶向下dp
         memo = new int[n][k + 1];
         for (int i = 0; i < n; i++) {
             Arrays.fill(memo[i], INF);
         }
-        return dp(graph, src, dst, k);
+        int answer = dp(graph, src, dst, k);
+        return answer < INF ? answer : -1;
     }
 
     /**
