@@ -32,9 +32,15 @@ public class Solution787 {
         for (int[] flight : flights) {
             graph[flight[0]].add(new Edge(flight[1], flight[2]));
         }
+        return bfs(graph, src, dst, k);
+    }
 
+    /**
+     * 传统广度优先遍历算法，通过普通队列按照层次遍历。
+     */
+    int bfs(List<Edge>[] graph, int src, int dst, int k) {
         int answer = INF;
-        int[] costs = new int[n]; /* 关键：从起点到达城市i的最低费用为prices[i]，这里不能简单的通过是否访问过作为判断逻辑，因为中转次数多的费用未必更多 */
+        int[] costs = new int[graph.length]; /* 关键：从起点到达城市i的最低费用为prices[i]，这里不能简单的通过是否访问过作为判断逻辑，因为中转次数多的费用未必更多 */
         Arrays.fill(costs, INF); /* 默认到达每个城市的费用为无穷大 */
         Queue<Vertex> queue = new LinkedList<>();
         costs[src] = 0; // base case: 始发站城市费用为0
