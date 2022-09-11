@@ -32,11 +32,12 @@ public class Solution787 {
         for (int[] flight : flights) {
             graph[flight[0]].add(new Edge(flight[1], flight[2]));
         }
-        return bfs(graph, src, dst, k);
+        return dijkstra(graph, src, dst, k);
     }
 
     /**
      * 传统广度优先遍历算法，通过普通队列按照层次遍历。
+     * 是否将下一层的节点纳入考量范围，唯一的因素是价格需要更低。
      */
     int bfs(List<Edge>[] graph, int src, int dst, int k) {
         int answer = INF;
@@ -65,6 +66,45 @@ public class Solution787 {
             }
         }
         return answer == INF ? -1 : answer;
+    }
+
+    /**
+     * dijkstra算法，通过优先权队列按照花费排序遍历。
+     * 是否将下一层的节点纳入考量范围，取决于价格是否更低或中转次数是否更少。
+     */
+    int dijkstra(List<Edge>[] graph, int src, int dst, int k) {
+        int[] transfers = new int[graph.length]; /* 从起点到达城市i的最少中转次数为transfers[i] */
+        int[] costs = new int[graph.length]; /* 从起点到达城市i的最低费用为prices[i] */
+        Arrays.fill(transfers, INF); /* 默认到达每个城市的中转次数为无穷大 */
+        Arrays.fill(costs, INF); /* 默认到达每个城市的费用为无穷大 */
+
+        Queue<Vertex> queue = new PriorityQueue<>(Comparator.comparingInt(a -> a.price));
+        // base case
+        transfers[src] = 0;
+        costs[src] = 0;
+        queue.offer(new Vertex(src, 0, 0));
+        while (!queue.isEmpty()) {
+            Vertex vertex = queue.poll();
+            if (vertex.id == dst) {
+                return vertex.price;
+            }
+            // 中转次数超过限制
+            if (vertex.times - 1 == k) {
+                continue;
+            }
+            for (Edge edge : graph[vertex.id]) {
+                int cost = vertex.price + edge.price;
+                int transfer = vertex.times + 1;
+                // 加入的唯一条件是价格更低或中转次数更少
+                if (costs[edge.vertex] <= cost && transfers[edge.vertex] <= transfer) {
+                    continue;
+                }
+                costs[edge.vertex] = cost;
+                transfers[edge.vertex] = transfer;
+                queue.offer(new Vertex(edge.vertex, cost, transfer));
+            }
+        }
+        return -1;
     }
 
     static class Edge {
