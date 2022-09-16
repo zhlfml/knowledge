@@ -48,7 +48,7 @@ public class Solution40 {
             }
             track.push(candidates[i]);
             selected[i] = true;
-            backtrack(collects, track, candidates, start + 1, selected, left - candidates[i]);
+            backtrack(collects, track, candidates, i + 1, selected, left - candidates[i]); /* next start is i + 1 */
             track.pop();
             selected[i] = false;
         }
