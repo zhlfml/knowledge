@@ -23,26 +23,23 @@ public class Solution90 {
     public List<List<Integer>> subsetsWithDup(int[] nums) {
         List<List<Integer>> collectors = new ArrayList<>();
         Stack<Integer> track = new Stack<>();
-        boolean[] selected = new boolean[nums.length];
         Arrays.sort(nums); /* 比78.子集多了排序 */
-        backtrack(collectors, track, nums, selected, 0);
+        backtrack(collectors, track, nums, 0);
         return collectors;
     }
 
     /**
      * 思路：与78.子集相比，这里多了重复的数字，只需额外控制下存在相同的数时，前一个未选择的前提下后一个不可以选择就可以，因此需要额外引入selected数组。
      */
-    void backtrack(List<List<Integer>> collectors, Stack<Integer> track, int[] nums, boolean[] selected, int start) {
+    void backtrack(List<List<Integer>> collectors, Stack<Integer> track, int[] nums, int start) {
         collectors.add(new ArrayList<>(track));
         for (int i = start; i < nums.length; i++) {
-            if (i > 0 && nums[i - 1] == nums[i] && !selected[i - 1]) { /* 比78.子集多了这一步 */
+            if (i > start && nums[i - 1] == nums[i]) { /* 比78.子集多了这一步 */
                 continue;
             }
             track.push(nums[i]);
-            selected[i] = true;
-            backtrack(collectors, track, nums, selected, i + 1);
+            backtrack(collectors, track, nums, i + 1);
             track.pop();
-            selected[i] = false;
         }
     }
 

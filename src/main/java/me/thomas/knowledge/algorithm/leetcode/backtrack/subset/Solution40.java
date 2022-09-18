@@ -28,18 +28,17 @@ public class Solution40 {
         List<List<Integer>> collects = new ArrayList<>();
         Stack<Integer> track = new Stack<>();
         Arrays.sort(candidates); /* 先排序，方便后续处理相同的数字 */
-        boolean[] selected = new boolean[candidates.length];
-        backtrack(collects, track, candidates, 0, selected, target);
+        backtrack(collects, track, candidates, 0, target);
         return collects;
     }
 
-    void backtrack(List<List<Integer>> collects, Stack<Integer> track, int[] candidates, int start, boolean[] selected, int left) {
+    void backtrack(List<List<Integer>> collects, Stack<Integer> track, int[] candidates, int start, int left) {
         if (left == 0) {
             collects.add(new ArrayList<>(track));
             return;
         }
         for (int i = start; i < candidates.length; i++) {
-            if (i > 0 && candidates[i - 1] == candidates[i] && !selected[i - 1]) {
+            if (i > start && candidates[i - 1] == candidates[i]) {
                 // 要点：相同的数，前面一个没有选择的情况下，后一个不能选择。
                 continue;
             }
@@ -47,10 +46,8 @@ public class Solution40 {
                 break;
             }
             track.push(candidates[i]);
-            selected[i] = true;
-            backtrack(collects, track, candidates, i + 1, selected, left - candidates[i]); /* next start is i + 1 */
+            backtrack(collects, track, candidates, i + 1, left - candidates[i]); /* next start is i + 1 */
             track.pop();
-            selected[i] = false;
         }
     }
 
