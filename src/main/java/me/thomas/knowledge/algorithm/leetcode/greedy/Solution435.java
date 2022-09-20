@@ -30,7 +30,7 @@ public class Solution435 {
                 return a[1] - b[1];
             }
         });
-        return eraseOverlapIntervals_greedy(intervals);
+        return eraseOverlapIntervals_dp(intervals);
     }
 
     /**
@@ -51,12 +51,28 @@ public class Solution435 {
         return intervals.length - least;
     }
 
+    /**
+     * 思路：与300. 最长递增子序列的思路相同。
+     */
     int eraseOverlapIntervals_dp(int[][] intervals) {
-        return 0;
+        int[] dp = new int[intervals.length];
+        Arrays.fill(dp, 1); /* 每个区间自身（区间数1）至少与其他区间不相交 */
+        int max = 1; /* 最多的不相交的区间数量 */
+        for (int i = 1; i < intervals.length; i++) {
+            for (int j = i - 1; j >= 0; j--) {
+                if (intervals[i][0] >= intervals[j][1]) { /* 后者的start在前者的end之后才不会相交 */
+                    dp[i] = Math.max(dp[i], dp[j] + 1); /* 必须从前一个遍历到起始位置 */
+                }
+            }
+            max = Math.max(max, dp[i]);
+        }
+        return intervals.length - max;
     }
 
     public static void main(String[] args) {
         Solution435 solution = new Solution435();
-        System.out.println(solution.eraseOverlapIntervals(new int[][] { { 0, 2 }, { 1, 3 }, { 2, 4 }, { 3, 5 }, { 4, 6 } }));
+        System.out.println(solution.eraseOverlapIntervals(
+                new int[][] { { -52, 31 }, { -73, -26 }, { 82, 97 }, { -65, -11 }, { -62, -49 }, { 95, 99 }, { 58, 95 }, { -31, 49 }, { 66, 98 }, { -63, 2 }, { 30, 47 },
+                              { -40, -26 } }));
     }
 }
