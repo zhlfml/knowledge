@@ -44,41 +44,24 @@ public class Solution1024 {
             }
         }); /* 按起始时间升序，结束时间降序排序 */
 
-        if (clips[0][0] > 0) { /* 检查第一个片段是否从时间0开始, 如果不是则无法拼出[0, time] */
-            return -1;
-        }
-        int n = clips.length;
-        int least = 1; /* 至少需要一个片段 */
-        int i = 0;
-        while (i < n) {
+        int least = 0;
+        int curEnd = 0, nextEnd = 0; /* 将当前end设置为0，妙，少了一次是否从0开始的判断，逻辑更统一 */
+        int i = 0, n = clips.length; /* 外层和内存循环都使用一个游标i，妙，省了内外侧游标赋值的过程，简化了逻辑 */
+        while (i < n && clips[i][0] <= curEnd) { /* 循环中直接判断了clips[i][1] < time，也妙，将控制循环的逻辑放在了一行不啰嗦 */
             /*
                内循环选择播放到最远的距离
              */
-            int next = i; /* 下一个播放的最远距离的数组下标 */
-            int j = i + 1;
-            while (j < n) {
-                if (clips[j][1] <= clips[i][1]) {
-                    j++;
-                    continue;
-                }
-                if (clips[j][0] <= clips[i][1] && clips[j][1] > clips[i][1]) {
-                    if (clips[next][1] < clips[j][1]) {
-                        next = j;
-                    }
-                    j++;
-                } else
-                    break;
+            while (i < n && clips[i][0] <= curEnd) {
+                nextEnd = Math.max(nextEnd, clips[i][1]);
+                i++;
             }
             least++;
-            if (clips[next][1] >= time) {
+            if (nextEnd >= time) {
                 return least;
             }
-            if (next == i) {
-                return -1;
-            }
-            i = next;
+            curEnd = nextEnd;
         }
-        return least;
+        return -1;
     }
 
     public static void main(String[] args) {
