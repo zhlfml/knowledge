@@ -21,12 +21,18 @@ public class Solution45 {
      * 解释: 跳到最后一个位置的最小跳跃数是 2。
      * 从下标为 0 跳到下标为 1 的位置，跳1步，然后跳3步到达数组的最后一个位置。
      * <p>
-     * 自己的思路：模拟如何跳跃求解。
      */
     public int jump(int[] nums) {
         if (nums == null || nums.length <= 1) {
             return 0;
         }
+        return jump_labuladong(nums);
+    }
+
+    /**
+     * 思路：模拟跳跃过程求解。
+     */
+    int jump_mine(int[] nums) {
         int n = nums.length;
         int prev = 0, next = 0; /* 当前在哪，需要跳跃到哪 */
         int jumps = 0; /* 跳跃的次数 */
@@ -50,8 +56,28 @@ public class Solution45 {
         return jumps + 1;
     }
 
+    /**
+     * 使用局部的最优解更新全局的最优解，如果走出了右边界，则步数+1
+     */
+    int jump_labuladong(int[] nums) {
+        int mostFar = 0;
+        int rightmost = 0; /* 第一次的右边界是0，第二次的右边界是nums[0]，第三次的右边界是1到nums[0]之间最远的距离 */
+        int jumps = 0;
+        for (int i = 0; i < nums.length; i++) { /* 在[0, nums.length - 1)之间都需要跳跃 */
+            if (i > rightmost) { /* 跳出了右边界，步数+1 */
+                rightmost = mostFar;
+                jumps++;
+            }
+            mostFar = Math.max(mostFar, i + nums[i]);
+            if (mostFar <= i) {
+                return -1;
+            }
+        }
+        return jumps;
+    }
+
     public static void main(String[] args) {
         Solution45 solution45 = new Solution45();
-        System.out.println(solution45.jump(new int[] { 3, 2, 1 }));
+        System.out.println(solution45.jump_labuladong(new int[] { 3, 2, 1 }));
     }
 }
