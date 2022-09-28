@@ -30,10 +30,7 @@ public class Solution1201 {
      */
     public int nthUglyNumber(int n, int a, int b, int c) {
         int low = LEFT_BOUND, high = RIGHT_BOUND;
-        while (low <= high) {
-            if (low == high) {
-                return low;
-            }
+        while (low < high) {
             int mid = low + (high - low) / 2;
             int count = (int) count(mid, a, b, c);
             if (count < n) {
@@ -42,7 +39,7 @@ public class Solution1201 {
                 high = mid;
             }
         }
-        return low + 1;
+        return low; /* 因为向左移动的过程中`high = mid`，所以high始终指向合法的值，当low == high退出时，直接返回low或high即可。*/
     }
 
     /**
