@@ -12,42 +12,52 @@ public class Solution372 {
     final int MOD = 1337;
 
     public int superPow(int a, int[] b) {
-        if (a <= 0) {
+        if (a < 0) {
             return -1;
         }
-        if (a == 1) {
-            return 1;
+        if (a <= 1) {
+            return a;
         }
-        int length = b.length;
-        int x = b[length - 1];
-        if (length == 1) {
-            return powmod(a, x);
-        }
-        int[] nb = new int[length - 1];
-        System.arraycopy(b, 0, nb, 0, nb.length);
-        return powmod(a, x) * powmod(superPow(a, nb), 10) % MOD;
+        return superPow(a, b, b.length - 1);
     }
 
-    int powmod(int a, int x) {
-        if (x < 0) {
-            return -1;
+    /**
+     * 思路：
+     * 幂公式：a^bcd = a^d * (a^bc)^10
+     * 取模公式：(a * b) mod c = ((a mod c) * (b mod c)) mod c
+     *
+     * @param a 底数
+     * @param b 指数，由数组组成
+     * @param p 指数当前处理的数，从b.length - 1到0处理
+     */
+    int superPow(int a, int[] b, int p) {
+        if (p == 0) {
+            return powmod(a, b[p]);
         }
+        return powmod(a, b[p]) * powmod(superPow(a, b, p - 1), 10) % MOD;
+    }
+
+    /**
+     * 快速计算指数取模运算
+     *
+     * @param a 底数
+     * @param x 指数 范围[0, 10]
+     * @return 运算结果
+     */
+    int powmod(int a, int x) {
+        a = a % MOD;
         if (x == 0) {
             return 1;
         }
-        a %= MOD;
-        if (x == 1) {
-            return a;
-        }
         if (x % 2 == 0) {
-            return powmod(a * a, x / 2) % MOD;
+            return powmod(a * a, x / 2);
         } else {
-            return a * powmod(a * a, (x - 1) / 2) % MOD;
+            return (a * powmod(a * a, (x - 1) / 2)) % MOD; /* 由于x的取值范围为[0, 10]，所以不用担心(a * powmod(a * a, (x - 1) / 2))越界 */
         }
     }
 
     public static void main(String[] args) {
         Solution372 solution = new Solution372();
-        System.out.println(solution.superPow(5577, new int[] { 5, 3, 4, 7, 3 }));
+        System.out.println(solution.superPow(1336, new int[] { 7 }));
     }
 }
