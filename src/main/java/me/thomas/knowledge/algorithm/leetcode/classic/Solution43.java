@@ -26,7 +26,7 @@ public class Solution43 {
         // 积的最长位数是两乘数位数之和
         char[] answer = new char[firstNum.length + secondNum.length];
         Arrays.fill(answer, '0');
-        // 模拟手算乘法
+        // 模拟手算乘法，每次循环直接将得数加入最终结果数组answer中。
         for (int i = firstNum.length - 1; i >= 0; i--) {
             for (int j = secondNum.length - 1; j >= 0; j--) {
                 // 计算两对应位上数字的乘积
@@ -38,9 +38,9 @@ public class Solution43 {
                 do {
                     // 和
                     int summer = (answer[position] - '0') + lowVal;
-                    // 写入当前位
+                    // 写入当前（低）位
                     answer[position] = (char) (summer % 10 + '0');
-                    highVal += summer / 10;
+                    highVal += summer / 10; /* 这里highVal可以是两位数 */
                     // 没有进位则停止按位加法
                     if (highVal == 0) {
                         break;
@@ -59,6 +59,6 @@ public class Solution43 {
 
     public static void main(String[] args) {
         Solution43 solution = new Solution43();
-        System.out.println(solution.multiply("123", "456"));
+        System.out.println(solution.multiply("99999", "111"));
     }
 }
