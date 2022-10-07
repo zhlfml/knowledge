@@ -13,42 +13,42 @@ package me.thomas.knowledge.algorithm.leetcode.math.factorial;
 public class Solution793 {
 
     /**
-     * 思路：二分查找
+     * 思路：二分查找，分别查找出符合条件的左边界和右边界数字，相减即可得出满足条件的数字的数量。
      *
      * @param k
      * @return
      */
     public int preimageSizeFZF(int k) {
-        int left = leftBound(k), right = rightBound(k);
-        return right - left + 1;
+        long left = leftBound(k), right = rightBound(k);
+        return (int) (right - left + 1);
     }
 
-    int leftBound(int target) {
+    long leftBound(int target) {
         long low = 0, high = Long.MAX_VALUE;
         while (low < high) {
-            long mid = ((high - low) >> 1) + low;
-            long zeroes = trailingZeroes(mid);
-            if (zeroes < target) {
+            long mid = low + (high - low) / 2;
+            long zeros = trailingZeroes(mid);
+            if (zeros < target) {
                 low = mid + 1;
             } else {
                 high = mid;
             }
         }
-        return (int) low;
+        return low;
     }
 
-    int rightBound(int target) {
+    long rightBound(int target) {
         long low = 0, high = Long.MAX_VALUE;
         while (low < high) {
-            long mid = ((high - low) >> 1) + low;
-            long zeroes = trailingZeroes(mid);
-            if (zeroes <= target) {
+            long mid = low + (high - low) / 2;
+            long zeros = trailingZeroes(mid);
+            if (zeros <= target) {
                 low = mid + 1;
             } else {
                 high = mid;
             }
         }
-        return (int) low - 1;
+        return low - 1;
     }
 
     /**
@@ -67,6 +67,7 @@ public class Solution793 {
 
     public static void main(String[] args) {
         Solution793 solution = new Solution793();
-        System.out.println(solution.preimageSizeFZF(5));
+        System.out.println(solution.preimageSizeFZF(5)); // output 0
+        System.out.println(solution.preimageSizeFZF(1000000000)); // output 5
     }
 }
