@@ -12,17 +12,17 @@ import java.util.Arrays;
 public class Solution204 {
 
     public int countPrimes(int n) {
-        boolean[] primes = new boolean[n];
+        boolean[] primes = new boolean[n + 1];
         Arrays.fill(primes, true);
 
         int answer = 0;
-        for (int i = 2; i < n; i++) {
-            if (!primes[i]) {
-                continue;
-            }
-            answer++;
-            for (long j = (long) i * i; j < n; j += i) {
-                primes[(int) j] = false;
+        for (int i = 2; i <= n; i++) {
+            if (primes[i]) {
+                int total = n / i;
+                for (int j = i; j <= total; j++) {
+                    primes[i * j] = false;
+                }
+                answer++;
             }
         }
         return answer;
