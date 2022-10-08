@@ -23,13 +23,26 @@ public class Solution398 {
         this.random = new Random();
     }
 
+    /**
+     * 输入
+     * ["Solution", "pick", "pick", "pick"]
+     * [[[1, 2, 3, 3, 3]], [3], [1], [3]]
+     * 输出
+     * [null, 4, 0, 2]
+     * <p>
+     * 解释
+     * Solution solution = new Solution([1, 2, 3, 3, 3]);
+     * solution.pick(3); // 随机返回索引 2, 3 或者 4 之一。每个索引的返回概率应该相等。
+     * solution.pick(1); // 返回 0 。因为只有 nums[0] 等于 1 。
+     * solution.pick(3); // 随机返回索引 2, 3 或者 4 之一。每个索引的返回概率应该相等。
+     */
     public int pick(int target) {
         int answer = -1;
         int times = 0; // target出现的次数
         for (int i = 0; i < nums.length; i++) {
-            if (nums[i] == target) {
+            if (this.nums[i] == target) {
                 times++;
-                if (random.nextInt(times) == 0) {
+                if (random.nextInt(times) == 0) { // 遇到第i个数，有1/i的概率选中次数。
                     answer = i;
                 }
             }

@@ -22,6 +22,7 @@ public class Solution528 {
             throw new IllegalArgumentException("w is empty array");
         }
         random = new Random();
+        // 这里的前缀和长度需要和原始数组保持一致，因为最终返回的数原数组下标的位置。
         prefixSum = new int[w.length];
         prefixSum[0] = w[0];
         for (int i = 1; i < w.length; i++) {
@@ -29,14 +30,19 @@ public class Solution528 {
         }
     }
 
+    /**
+     * 思路：计算前缀和，如数组[1, 9, 2, 1]的前缀和为[1, 10, 12, 13]，那么我们随机选中[0, 13) + 1 => [1, 13]这13个数字中的一个，其概率相等。确定数字后只需左边界二分查找数在的位置即可。
+     *
+     * @return
+     */
     public int pickIndex() {
         // randomValue: [1, prefixSum[prefixSum.length - 1]]
-        int randomValue = random.nextInt(prefixSum[prefixSum.length - 1]) + 1;
+        int randomValue = random.nextInt(prefixSum[prefixSum.length - 1]) + 1; /* 选中前缀和中[1, prefixSum[prefixSum.length - 1]]概率相等 */
         return leftBound(randomValue);
     }
 
     private int leftBound(int target) {
-        int low = 0, high = prefixSum.length;
+        int low = 0, high = prefixSum.length - 1; /* 经过测试这里high是否需要减1都可以通过测试，而且官方题解也减了1，后期遇到相同的问题需要关注下。*/
         while (low < high) {
             int mid = low + (high - low) / 2;
             if (prefixSum[mid] < target) {

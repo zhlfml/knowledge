@@ -31,6 +31,7 @@ public class Solution382 {
         int index = 0;
         ListNode cur = head;
         while (cur != null) {
+            // 关键点：当你遇到第i（从1开始计数，否则第0个元素但选中概率是0，明显不合理）个元素时，应该有1/i的概率选择该元素
             int randomVal = random.nextInt(++index);
             if (randomVal == 0) {
                 answer = cur.val;
