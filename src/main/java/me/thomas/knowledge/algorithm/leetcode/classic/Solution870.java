@@ -31,25 +31,23 @@ public class Solution870 {
         }
 
         Arrays.sort(nums1);
-        int[][] newNums2 = new int[n2][3];
+        int[][] newNums2 = new int[n2][2];
         for (int i = 0; i < nums2.length; i++) {
             newNums2[i][0] = i;
             newNums2[i][1] = nums2[i];
-            newNums2[i][2] = -1; /* 表示未设置过值，非必要 */
         }
         Arrays.sort(newNums2, Comparator.comparingInt(a -> a[1])); /* 按照原始值排序 */
 
+        int[] answer = new int[n1]; /* 优化：可以借助newNums的位置信息直接给answer数组赋值 */
         // 依次遍历排序后的nums1中的元素，如果大于将要放置的newNums2的元素，则放入，否则放入newNums2的末尾。
         int head = 0, tail = n2 - 1; /* 定义两个指针指明newNums2中前后可以安排的当前位置 */
         for (int num : nums1) {
             if (num > newNums2[head][1]) {
-                newNums2[head++][2] = num;
+                answer[newNums2[head++][0]] = num;
             } else {
-                newNums2[tail--][2] = num;
+                answer[newNums2[tail--][0]] = num;
             }
         }
-        // 还原nums2的原来的排序
-        Arrays.sort(newNums2, Comparator.comparingInt(a -> a[0])); /* 按照下标排序 */
-        return Arrays.stream(newNums2).mapToInt(a -> a[2]).toArray();
+        return answer;
     }
 }
