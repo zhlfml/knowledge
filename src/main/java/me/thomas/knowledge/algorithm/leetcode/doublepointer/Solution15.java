@@ -33,6 +33,9 @@ public class Solution15 {
         List<List<Integer>> answer = new ArrayList<>();
         int k = nums.length - 1;
         while (k >= 0) {
+            if (nums[k] < 0) { /* 左边全是负数，已经无解，可以提前退出 */
+                return answer;
+            }
             int i = 0, j = k - 1;
             while (i < j) {
                 int sum = nums[i] + nums[j] + nums[k];
