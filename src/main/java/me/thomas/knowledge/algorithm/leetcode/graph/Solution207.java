@@ -1,6 +1,9 @@
 package me.thomas.knowledge.algorithm.leetcode.graph;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
 
 /**
  * 你这个学期必须选修 numCourses 门课程，记为0到numCourses - 1 。
@@ -27,6 +30,7 @@ public class Solution207 {
             indegrees[prerequisite[0]]++;
         }
 
+        // 如何获得入度最小的节点？-- 通过queue，精华之处在于只有当入度等于0时才放入queue中。
         Queue<Integer> queue = new LinkedList<>();
         for (int i = 0; i < numCourses; i++) {
             if (indegrees[i] == 0) {
@@ -34,7 +38,7 @@ public class Solution207 {
             }
         }
 
-        int count = 0;
+        int count = 0; /* 精华之处二：统计入度为0的课程的数量 */
         while (!queue.isEmpty()) {
             count++;
             int course = queue.poll();
