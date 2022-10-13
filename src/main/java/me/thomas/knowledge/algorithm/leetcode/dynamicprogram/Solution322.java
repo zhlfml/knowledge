@@ -15,32 +15,32 @@ import java.util.Arrays;
  */
 public class Solution322 {
 
+    final int INF = 0x3fffffff; /* 使用INF作为无穷大还是有优势的，可以避免数字越界 */
+
     final int UNSET = -2;
 
     public int coinChange(int[] coins, int amount) {
         int[] memo = new int[amount + 1];
         Arrays.fill(memo, UNSET);
-        return helper(coins, amount, memo);
+        int answer = helper(coins, amount, memo);
+        return answer < INF ? answer : -1;
     }
 
     int helper(int[] coins, int amount, int[] memo) {
+        if (amount < 0) {
+            return INF; /* 表示无解 */
+        }
         if (amount == 0) {
             return 0;
         }
-        if (amount < 0) {
-            return -1;
-        }
-        if (memo[amount] > UNSET) {
+        if (memo[amount] != UNSET) {
             return memo[amount];
         }
-        int best = Integer.MAX_VALUE;
+        int answer = INF;
         for (int coin : coins) {
-            int subAnswer = helper(coins, amount - coin, memo);
-            if (subAnswer >= 0) {
-                best = Math.min(best, subAnswer);
-            }
+            answer = Math.min(answer, helper(coins, amount - coin, memo) + 1);
         }
-        memo[amount] = (best == Integer.MAX_VALUE) ? -1 : 1 + best;
-        return memo[amount];
+        memo[amount] = answer;
+        return answer;
     }
 }
