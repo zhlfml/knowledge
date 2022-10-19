@@ -41,12 +41,18 @@ public class Solution873 {
         int[][] dp = new int[n][n]; /* 含义：以arr[j],arr[k]结尾的斐波那契子数列的长度为dp[j][k]，其前序arr[i]也是通过斐波那契数列的定义快速计算出其位置的 */
         for (int j = 0; j < n - 1; j++) {
             for (int k = j + 1; k < n; k++) { /* 内外层循环的条件与朴素的暴力法一致 */
-                dp[j][k] = 2; /* 任意两个数结束的序列长度至少等于2 */
+                // 由于剪枝后的`dp[j][k] = 2`赋值代码可能会走不到，所以必须在取值数设置最小值为2
+                // dp[j][k] = 2; /* 任意两个数结束的序列长度至少等于2 */
                 int i = cache.getOrDefault(arr[k] - arr[j], -1);
-                if (0 <= i && i < j) { /* i的取值范围 [0, j) */
-                    dp[j][k] = dp[i][j] + 1;
-                    longest = Math.max(longest, dp[j][k]); /* longest只要被赋值，长度至少为3，所以return处的longest不用做长度判断 */
+                /* i的取值范围 [0, j) */
+                if (i < 0) {
+                    continue;
                 }
+                if (i >= j) { /* 性能优化的关键点：如果arr[k] - arr[j]后的值所在的位置i大于等于了j，说明此时arr[k]太大了，k++后的数更大，所以可以快速剪枝 */
+                    break;
+                }
+                dp[j][k] = Math.max(dp[i][j], 2) /* 任意两个数结束的序列长度至少等于2 */ + 1;
+                longest = Math.max(longest, dp[j][k]); /* longest只要被赋值，长度至少为3，所以return处的longest不用做长度判断 */
             }
         }
         return longest;
@@ -81,7 +87,7 @@ public class Solution873 {
 
     public static void main(String[] args) {
         Solution873 solution873 = new Solution873();
-        System.out.println(solution873.lenLongestFibSubseq(new int[] { 2, 4, 9 }));
+        System.out.println(solution873.lenLongestFibSubseq(new int[] { 2, 4, 7, 8, 9, 10, 14, 15, 18, 23, 32, 50 }));
     }
 
 }
