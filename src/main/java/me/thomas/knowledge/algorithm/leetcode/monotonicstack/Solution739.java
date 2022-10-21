@@ -18,12 +18,22 @@ public class Solution739 {
     public int[] dailyTemperatures(int[] temperatures) {
         int[] answer = new int[temperatures.length];
         Stack<Integer> stack = new Stack<>();
-        // 关键点：需要从后向前遍历数组
-        for (int i = temperatures.length - 1; i >= 0; i--) {
+        // 关键点：需要从后向前遍历数组 -- 其实与遍历顺序无关，正着遍历也可以
+        /*for (int i = temperatures.length - 1; i >= 0; i--) {
             while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
                 stack.pop();
             }
             answer[i] = stack.isEmpty() ? 0 : stack.peek() - i;
+            stack.push(i);
+        }*/
+        // 这里演示正序遍历，与倒序遍历的区别是：1. 需要使用pop弹出的值 2. 弹出的数值的需要立即更新结果。
+        // 关键是不管正序还是倒序遍历，弹出的规则"写法上"没有改变，但内涵却变了，需要细品。
+        int n = temperatures.length;
+        for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && temperatures[stack.peek()] < temperatures[i]) {
+                int index = stack.pop();
+                answer[index] = i - index;
+            }
             stack.push(i);
         }
         return answer;
