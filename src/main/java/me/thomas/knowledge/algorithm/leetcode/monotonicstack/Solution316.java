@@ -27,14 +27,13 @@ public class Solution316 {
          * 难点在于正确维护stats、visited数组
          */
         for (char c : s.toCharArray()) {
+            stats[c - 'a']--; // 后方剩余的字符c的出现次数，这种思路更易于理解。
             // 确保只能放入一次, 必须得在第一步判断
             if (visited[c - 'a'] > 0) {
-                stats[c - 'a']--; // 直接丢弃的时候需要减少一次字符出现的次数
                 continue;
             }
-            while (!deque.isEmpty() && deque.peekLast() >= c - 'a' && stats[deque.peekLast()] > 1) {
+            while (!deque.isEmpty() && deque.peekLast() >= c - 'a' && stats[deque.peekLast()] > 0) {
                 int val = deque.pollLast();
-                stats[val]--; // 弹出丢弃的时候也需要减少一次字符出现的次数
                 visited[val]--;
             }
             deque.offer(c - 'a');
