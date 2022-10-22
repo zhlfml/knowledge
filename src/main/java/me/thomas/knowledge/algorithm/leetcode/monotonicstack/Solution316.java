@@ -23,14 +23,18 @@ public class Solution316 {
         }
         int[] visited = new int[26]; /* 记录在deque里的字符 */
         Deque<Integer> deque = new LinkedList<>();
+        /*
+         * 难点在于正确维护stats、visited数组
+         */
         for (char c : s.toCharArray()) {
-            // 确保只能放入一次
+            // 确保只能放入一次, 必须得在第一步判断
             if (visited[c - 'a'] > 0) {
+                stats[c - 'a']--; // 直接丢弃的时候需要减少一次字符出现的次数
                 continue;
             }
-            while (!deque.isEmpty() && deque.peek() > c - 'a' && stats[deque.peek()] > 1) {
-                int val = deque.poll();
-                stats[val]--;
+            while (!deque.isEmpty() && deque.peekLast() >= c - 'a' && stats[deque.peekLast()] > 1) {
+                int val = deque.pollLast();
+                stats[val]--; // 弹出丢弃的时候也需要减少一次字符出现的次数
                 visited[val]--;
             }
             deque.offer(c - 'a');
@@ -45,8 +49,4 @@ public class Solution316 {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-        Solution316 solution316 = new Solution316();
-        System.out.println(solution316.removeDuplicateLetters("ecbacba"));
-    }
 }
