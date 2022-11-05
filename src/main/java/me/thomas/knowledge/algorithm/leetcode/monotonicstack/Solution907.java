@@ -30,7 +30,7 @@ public class Solution907 {
         for (int i = 0; i <= n; i++) {
             int num = i < n ? arr[i] : 0;
             while (!stack.isEmpty() && arr[stack.peek()] >= num) { /* 由于对称性，这里判断条件是 `>` 还是 `>=` 对结果无影响 */
-                int index = stack.pop(); // 作为目前为止的最大值弹出
+                int index = stack.pop(); // 作为目前为止的最大值弹出，但确实当前区间的最小值。
                 answer += (long) (i - index) * (index - (stack.isEmpty() ? -1 : stack.peek())) * arr[index];
             }
             stack.push(i);
