@@ -24,35 +24,46 @@ package me.thomas.knowledge.algorithm.leetcode.dynamicprogram;
 public class Solution1687 {
 
     /**
-     * 思路：前缀和 + 动态数组
+     * 思路：前缀和 + 动态数组 + 二分法
      */
     public int boxDelivering(int[][] boxes, int portsCount, int maxBoxes, int maxWeight) {
         int n = boxes.length;
-        int[] prefix = new int[n + 1];
-        prefix[0] = 0;
+        int[] prefixSum = new int[n + 1];
+        prefixSum[0] = 0;
         for (int i = 1; i <= n; i++) {
-            prefix[i] = prefix[i - 1] + boxes[i - 1][1];
+            prefixSum[i] = prefixSum[i - 1] + boxes[i - 1][1];
+        }
+
+        int[] prefixContinue = new int[n + 1];
+        prefixContinue[0] = 0;
+        prefixContinue[1] = 1;
+        for (int i = 2; i <= n; i++) {
+            prefixContinue[i] = prefixContinue[i - 1] + (boxes[i - 2][0] == boxes[i - 1][0] ? 0 : 1);
         }
 
         int[] dp = new int[n + 1]; // 定义：将[0, i]区间的箱子运送到码头最低需要dp[i]次行程。
         dp[1] = 2; /* base case: 送第一个箱子需要2趟行程：从仓库运送箱子到码头x，再回到仓库 */
         for (int i = 2; i <= n; i++) {
-            dp[i] = dp[i - 1] + 2; // 最坏的情况下不拼接，直接运送第i个箱子需要单独2个行程。
             // 回头查找从哪里开始一起运送比较省行程
+            int from = leftBound(prefixSum, Math.max(i - maxBoxes, 1), i, maxWeight); /* i是从1开始的 */
             // 中间有连续码头相同的箱子算作一次行程
-            int delivers = 2; // 一起运送的箱子至少有去和回两个行程。
-            for (int j = i - 1; j >= 1; j--) {
-                // 运送的箱子数目和重量限制
-                if (i - j + 1 > maxBoxes || prefix[i] - prefix[j - 1] > maxWeight) {
-                    break;
-                }
-                if (boxes[j - 1][0] != boxes[j][0]) {
-                    delivers++;
-                }
-                dp[i] = Math.min(dp[i], dp[j - 1] + delivers);
-            }
+            int delivers = 2 + (prefixContinue[i] - prefixContinue[from]); // 一起运送的箱子至少有去和回两个行程。
+            dp[i] = dp[from - 1] + delivers;
         }
         return dp[n];
+    }
+
+    int leftBound(int[] prefix, int from, int to, int target) {
+        int low = from, high = to;
+        while (low < high) {
+            int mid = low + (high - low) / 2;
+            if (prefix[to] - prefix[mid - 1] <= target) {
+                high = mid;
+            } else {
+                low = mid + 1;
+            }
+        }
+        return low;
     }
 
     public static void main(String[] args) {
