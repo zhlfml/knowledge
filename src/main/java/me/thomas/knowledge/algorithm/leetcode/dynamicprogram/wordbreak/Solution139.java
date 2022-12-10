@@ -1,8 +1,8 @@
 package me.thomas.knowledge.algorithm.leetcode.dynamicprogram.wordbreak;
 
-import java.util.HashSet;
+import com.google.common.collect.ImmutableList;
+
 import java.util.List;
-import java.util.Set;
 
 /**
  * 139. 单词拆分
@@ -29,19 +29,14 @@ public class Solution139 {
         if (s == null || s.length() == 0) {
             return true;
         }
-        Set<String> wordDictSet = new HashSet<>(wordDict);
         int len = s.length();
-        boolean[] dp = new boolean[len + 1]; /* 含义：字符串s的区间从0到i是否可以利用字典中出现的单词拼接出记为dp[i] */
-        // base case：0字符长度为true
-        dp[0] = true;
+        boolean[] dp = new boolean[len + 1]; // 含义：字符串s的前i个字符能否通过字典拼出的结果为dp[i];
+        dp[0] = true; // base case: 没有字符时能拼出
         for (int i = 1; i <= len; i++) {
-            if (wordDictSet.contains(s.substring(0, i))) {
-                dp[i] = true;
-            }
-            // s[0..i]不是一个完整的单词，那么尝试分解，查看其是否为二个或以上单词组合而成。
-            else {
-                for (int j = i - 1; j >= 1; j--) { /* 倒过来判断性能更高 */
-                    dp[i] = dp[j] && wordDictSet.contains(s.substring(j, i));
+            for (String word : wordDict) {
+                int w = word.length();
+                if (s.startsWith(word, i - w)) {
+                    dp[i] = dp[i - w];
                     if (dp[i]) {
                         break;
                     }
@@ -49,6 +44,12 @@ public class Solution139 {
             }
         }
         return dp[len];
+    }
+
+    public static void main(String[] args) {
+        Solution139 solution139 = new Solution139();
+        System.out.println(solution139.wordBreak("catsandog", ImmutableList.of("cats", "dog", "sand", "and", "cat")));
+        System.out.println(solution139.wordBreak("applepenapple", ImmutableList.of("apple", "pen")));
     }
 
 }
