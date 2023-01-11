@@ -38,8 +38,4 @@ public class Solution779 {
         return left ? bit : 1 - bit;
     }
 
-    public static void main(String[] args) {
-        Solution779 solution779 = new Solution779();
-        System.out.println(solution779.kthGrammar(2, 2));
-    }
 }

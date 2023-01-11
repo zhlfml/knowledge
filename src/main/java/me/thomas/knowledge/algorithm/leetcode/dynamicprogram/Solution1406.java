@@ -73,6 +73,6 @@ public class Solution1406 {
 
     public static void main(String[] args) {
         Solution1406 solution = new Solution1406();
-        System.out.println(solution.stoneGameIII(new int[] { 1, 2, 3, 7 }));
+        System.out.println(solution.stoneGameIII(new int[] { -565, 891, 552, 969, 903 }));
     }
 }

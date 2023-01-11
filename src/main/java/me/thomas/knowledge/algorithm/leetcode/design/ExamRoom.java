@@ -37,6 +37,9 @@ public class ExamRoom {
         if (segment == null) {
             return -1;
         }
+        if (segment.getStart() + 1 == segment.getEnd()) {
+            throw new IllegalStateException("no seat left.");
+        }
         int seat;
         if (segment.getStart() == -1) {
             seat = 0;
@@ -137,6 +140,7 @@ public class ExamRoom {
         System.out.println(examRoom2.seat()); // 0
         System.out.println(examRoom2.seat()); // 3
         System.out.println(examRoom2.seat()); // 1
+        System.out.println(examRoom2.seat()); // 2
         System.out.println(examRoom2.seat()); // 2
         examRoom2.leave(1);
         examRoom2.leave(3);
